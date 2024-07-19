@@ -7,95 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llShot"
+    <ImageView
+        android:id="@+id/ivHuman"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/llConnect"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/btDraw"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_draw"
-            android:layout_weight="1"/>
-
-
-        <Button
-            android:id="@+id/btFade"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_fade"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btLayup"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_layup"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btPunch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_punch"
-            android:layout_weight="1"/>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llApproach"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llShot">
-
-        <Button
-            android:id="@+id/btChip"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_chip"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btPitch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_pitch"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btFlop"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_flop"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btRawData"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_button"
-            android:layout_weight="1"/>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_body" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/llConnect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llApproach">
-
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/btConnect"
             android:layout_width="match_parent"
@@ -105,42 +42,15 @@
             android:layout_weight="1"/>
 
         <Button
-            android:id="@+id/btStart"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_start"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btEnd"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/selector_button_end"
-            android:layout_weight="1"/>
-
-        <Button
             android:id="@+id/btData"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="5dp"
             android:background="@drawable/selector_button_data"
             android:layout_weight="1"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <ImageView
-        android:id="@+id/ivHuman"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llConnect"
-        app:srcCompat="@drawable/icon_body" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

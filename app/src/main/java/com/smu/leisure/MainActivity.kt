@@ -65,17 +65,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             true
         }
 
-        binding.btDraw.setOnClickListener(this)
-        binding.btFade.setOnClickListener(this)
-        binding.btLayup.setOnClickListener(this)
-        binding.btPunch.setOnClickListener(this)
-        binding.btChip.setOnClickListener(this)
-        binding.btPitch.setOnClickListener(this)
-        binding.btFlop.setOnClickListener(this)
-        binding.btRawData.setOnClickListener(this)
         binding.btConnect.setOnClickListener(this)
-        binding.btStart.setOnClickListener(this)
-        binding.btEnd.setOnClickListener(this)
         binding.btData.setOnClickListener(this)
 
         Constants.mapSelIndex[1] = Pair("13", "15")
@@ -90,80 +80,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     }
 
     override fun onClick(p0: View?) {
-        var strStartName = ""
-        var strCreatedData = ""
-
         when(p0!!.id) {
-            R.id.btDraw -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_DRAW}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_DRAW)
-            }
-            R.id.btFade -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_FADE}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_FADE)
-            }
-            R.id.btLayup -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_LAYUP}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_LAYUP)
-            }
-            R.id.btPunch -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_PUNCH}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_PUNCH)
-            }
-            R.id.btChip -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_CHIP}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_CHIP)
-            }
-            R.id.btPitch -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_PITCH}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_PITCH)
-            }
-            R.id.btFlop -> {
-                strCreatedData = commonUtils.getCurrentDateTime()
-
-                Constants.nStatusIndex = Constants.STATUS_INDEX_SWING
-                strStartName = "${Constants.SWING_TYPE_FLOP}$strCreatedData"
-                sendMessage("start_$strStartName")
-                saveRecentData(strCreatedData, Constants.SWING_TYPE_FLOP)
-            }
-            R.id.btRawData -> {
-                connectClient()
-            }
             R.id.btConnect -> {
                 Thread {
                     ObNetworkClient.connect(Constants.NETWORK_IP, Constants.NETWORK_PORT, applicationContext)
                 }.start()
-            }
-            R.id.btStart -> {
-                sendMessage("application")
-            }
-            R.id.btEnd -> {
-                Constants.nStatusIndex = Constants.STATUS_INDEX_RECEIVE
-                sendMessage("stop")
             }
             R.id.btData -> {
                 val intent = Intent(this@MainActivity, DataActivity::class.java)
