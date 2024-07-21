@@ -16,19 +16,20 @@ import com.smu.leisure.base.Constants
 import com.smu.leisure.base.Measurement
 import com.smu.leisure.databinding.ActivityMainBinding
 import com.smu.leisure.db.AppDatabase
-import com.smu.leisure.db.GolfDao
-import com.smu.leisure.db.GolfEntity
+import com.smu.leisure.db.LeisureDao
+import com.smu.leisure.db.LeisureEntity
 import java.io.BufferedWriter
 import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.Socket
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
     private lateinit var binding: ActivityMainBinding
     private var commonUtils = CommonUtils()
 
     lateinit var db : AppDatabase
-    lateinit var swingDao: GolfDao
+    lateinit var leisureDao: LeisureDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +37,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        db = AppDatabase.getInstance(applicationContext)!!
-//        swingDao = db.getGolfDao()
+        db = AppDatabase.getInstance(applicationContext)!!
+        leisureDao = db.getLeisureDao()
 
         binding.ivHuman.setOnTouchListener { view, motionEvent ->
             if(motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -51,15 +52,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 val headArea = Rect(490, 50, 680, 250) // Example coordinates
 
                 if (chestArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_CHEST)
+                    showCustomDialog(Constants.POINT_AREA_S01)
                 } else if (handArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_HAND)
+                    showCustomDialog(Constants.POINT_AREA_S02)
                 } else if (wristArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_WRIST)
+                    showCustomDialog(Constants.POINT_AREA_S03)
                 } else if (stomachArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_STOMACH)
+                    showCustomDialog(Constants.POINT_AREA_S04)
                 } else if (headArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_HEAD)
+                    showCustomDialog(Constants.POINT_AREA_S05)
                 }
             }
             true
@@ -68,11 +69,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         binding.btConnect.setOnClickListener(this)
         binding.btData.setOnClickListener(this)
 
-        Constants.mapSelIndex[1] = Pair("13", "15")
-        Constants.mapSelIndex[2] = Pair("23", "25")
-        Constants.mapSelIndex[3] = Pair("33", "35")
-        Constants.mapSelIndex[4] = Pair("43", "45")
-        Constants.mapSelIndex[5] = Pair("53", "55")
+        Constants.fSelIndex.add(12.3f)
+        Constants.fSelIndex.add(4.7f)
+        Constants.fSelIndex.add(6.3f)
+        Constants.fSelIndex.add(11.8f)
+        Constants.fSelIndex.add(9.4f)
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -89,61 +90,46 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             R.id.btData -> {
                 val intent = Intent(this@MainActivity, DataActivity::class.java)
                 startActivity(intent)
+
+//                insertTestData()
             }
         }
     }
 
     private fun showCustomDialog(index : Int) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_custom, null)
-        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialog)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_custom_degree, null)
+        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialogDegree)
 
-        var strMainMessage = "PERCENTAGE"
-        var strSimilarity : String = "0"
-        var strError : String = "0"
+        var strDegree : String = "0.0"
 
         when(index) {
-            Constants.POINT_AREA_CHEST -> {
-                val dataItem = Constants.mapSelIndex[Constants.POINT_AREA_CHEST]
-                dataItem?.let {
-                    strSimilarity = it.first
-                    strError = it.second
-                }
+            Constants.POINT_AREA_S01 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S01 - 1]
+                strDegree = dataItem.toString()
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup_1)
             }
-            Constants.POINT_AREA_HAND -> {
-                val dataItem = Constants.mapSelIndex[Constants.POINT_AREA_HAND]
-                dataItem?.let {
-                    strSimilarity = it.first
-                    strError = it.second
-                }
+            Constants.POINT_AREA_S02 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S02 - 1]
+                strDegree = dataItem.toString()
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup_2)
             }
-            Constants.POINT_AREA_WRIST -> {
-                val dataItem = Constants.mapSelIndex[Constants.POINT_AREA_WRIST]
-                dataItem?.let {
-                    strSimilarity = it.first
-                    strError = it.second
-                }
+            Constants.POINT_AREA_S03 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S03 - 1]
+                strDegree = dataItem.toString()
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup_3)
             }
-            Constants.POINT_AREA_STOMACH -> {
-                val dataItem = Constants.mapSelIndex[Constants.POINT_AREA_STOMACH]
-                dataItem?.let {
-                    strSimilarity = it.first
-                    strError = it.second
-                }
+            Constants.POINT_AREA_S04 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S04 - 1]
+                strDegree = dataItem.toString()
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup_4)
             }
-            Constants.POINT_AREA_HEAD -> {
-                val dataItem = Constants.mapSelIndex[Constants.POINT_AREA_HEAD]
-                dataItem?.let {
-                    strSimilarity = it.first
-                    strError = it.second
-                }
+            Constants.POINT_AREA_S05 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S05 - 1]
+                strDegree = dataItem.toString()
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup_5)
             }
@@ -155,13 +141,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         dialog.setCancelable(true) // Set to false if you don't want it to be dismissible
 
         // Access TextViews if you need to set text dynamically
-        val tvSimilarity = dialogView.findViewById<TextView>(R.id.tvSimilarity)
-        val tvErrorRate = dialogView.findViewById<TextView>(R.id.tvErrorRate)
+        val tvDegree = dialogView.findViewById<TextView>(R.id.tvDegree)
 
-        val strSimilarityP = strSimilarity + getString(R.string.app_common_percentage)
-        val strErrorP = strError + getString(R.string.app_common_percentage)
-        tvSimilarity.text = strSimilarityP
-        tvErrorRate.text = strErrorP
+        val strDegreeD = strDegree + getString(R.string.app_common_degree)
+        tvDegree.text = strDegreeD
 
         // Show the dialog
         dialog.show()
@@ -199,24 +182,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                         val headData = gson.fromJson(headJson, Measurement::class.java)
 
                         // Assign the values to your variables
-                        Constants.recentChest = chestData
-                        Constants.recentHand = handData
-                        Constants.recentWrist = wristData
-                        Constants.recentStomach = stomachData
-                        Constants.recentHead = headData
+                        Constants.s01 = 0.0f
+                        Constants.s02 = 0.0f
+                        Constants.s03 = 0.0f
+                        Constants.s04 = 0.0f
+                        Constants.s05 = 0.0f
 
                         Thread {
-                            swingDao.insertTodo(
-                                GolfEntity(
+                            leisureDao.insertTodo(
+                                LeisureEntity(
                                     null,
                                     Constants.recentCreateddate,
-                                    Constants.recentbDownloaded,
-                                    Constants.recentType,
-                                    Constants.recentChest,
-                                    Constants.recentHand,
-                                    Constants.recentWrist,
-                                    Constants.recentStomach,
-                                    Constants.recentHead
+                                    Constants.emergency,
+                                    Constants.s01,
+                                    Constants.s02,
+                                    Constants.s03,
+                                    Constants.s04,
+                                    Constants.s05,
+                                    Constants.s06,
+                                    Constants.s07,
+                                    Constants.s08,
+                                    Constants.s09,
+                                    Constants.s10,
+                                    Constants.s11,
+                                    Constants.s12,
+                                    Constants.s13,
+                                    Constants.s14,
+                                    Constants.s15,
+                                    Constants.s16,
                                 )
                             )
                         }.start()
@@ -228,8 +221,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private fun saveRecentData(strFileName : String, strType : String) {
         Constants.recentCreateddate = strFileName
-        Constants.recentbDownloaded = false
-        Constants.recentType = strType
+        Constants.emergency = '1'
     }
 
     private fun connectClient() {
@@ -266,27 +258,47 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     fun insertTestData() {
 
-        val createddate = commonUtils.getFileName(Constants.SWING_TYPE_PUNCH)
-        val bDownloaded = false
-        val strType = Constants.SWING_TYPE_PUNCH
-        val chest = Measurement(mean = 0.0, max = 0.0)
-        val hand = Measurement(mean = 0.0, max = 0.0)
-        val wrist = Measurement(mean = 0.0, max = 0.0)
-        val stomach = Measurement(mean = 0.0, max = 0.0)
-        val head = Measurement(mean = 0.0, max = 0.0)
+        val createddate = commonUtils.getCurrentDateTime()
+        val strEmergency = Random.nextInt(1, 3).toChar()
+        val s01 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s02 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s03 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s04 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s05 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s06 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s07 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s08 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s09 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s10 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s11 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s12 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s13 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s14 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s15 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
+        val s16 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
 
         Thread {
-            swingDao.insertTodo(
-                GolfEntity(
+            leisureDao.insertTodo(
+                LeisureEntity(
                     null,
                     createddate,
-                    bDownloaded,
-                    strType,
-                    chest,
-                    hand,
-                    wrist,
-                    stomach,
-                    head
+                    strEmergency,
+                    s01,
+                    s02,
+                    s03,
+                    s04,
+                    s05,
+                    s06,
+                    s07,
+                    s08,
+                    s09,
+                    s10,
+                    s11,
+                    s12,
+                    s13,
+                    s14,
+                    s15,
+                    s16,
                 )
             )
         }.start()

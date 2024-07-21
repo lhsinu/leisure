@@ -1,19 +1,18 @@
 package com.smu.leisure
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.smu.leisure.base.MyApplication
 import com.smu.leisure.databinding.ItemDataBinding
-import com.smu.leisure.db.GolfEntity
+import com.smu.leisure.db.LeisureEntity
 
-class DataRecyclerViewAdapter(private val dataList: ArrayList<GolfEntity>, private val listener : OnItemClickListener, private val buttonListener: OnItemClickListener) : RecyclerView.Adapter<DataRecyclerViewAdapter.MyViewHolder>()  {
+class DataRecyclerViewAdapter(private val context: Context, private val dataList: ArrayList<LeisureEntity>, private val listener : OnItemClickListener) : RecyclerView.Adapter<DataRecyclerViewAdapter.MyViewHolder>()  {
     inner class MyViewHolder(binding: ItemDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
         val tvTitle = binding.tvTitle
-        val tvDownload = binding.tvDownloaded
-        val btDownload = binding.btDownload
-        val tvType = binding.tvType
+        val tvEmergency = binding.tvEmergency
 
         val root = binding.root
     }
@@ -24,21 +23,18 @@ class DataRecyclerViewAdapter(private val dataList: ArrayList<GolfEntity>, priva
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val swingData = dataList[position]
+        val leisureData = dataList[position]
 
-        holder.tvTitle.text = swingData.createddate
-        holder.tvType.text = swingData.type
+        holder.tvTitle.text = leisureData.createddate
 
-        if(swingData.download) {
-            holder.tvDownload.text = MyApplication.ApplicationContext().getString(R.string.app_data_downloaded)
-            holder.btDownload.isEnabled = false
+        if(leisureData.emergency == '1') {
+            val strEmergency = context.getString(R.string.str_wound)
+            holder.tvEmergency.text = strEmergency
         } else {
-            holder.tvDownload.text = MyApplication.ApplicationContext().getString(R.string.app_data_download)
+            val strEmergency = context.getString(R.string.str_emergency)
+            holder.tvEmergency.text = strEmergency
         }
 
-        holder.btDownload.setOnClickListener {
-            buttonListener.onDataButtonClick(position)
-        }
 
         holder.root.setOnClickListener {
             listener.onDataItemClick(position)

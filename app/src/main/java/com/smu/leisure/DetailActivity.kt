@@ -42,17 +42,17 @@ class DetailActivity : AppCompatActivity() {
                 val stomachArea = Rect(400, 850, 730, 1060) // Example coordinates
                 val headArea = Rect(470, 40, 680, 300) // Example coordinates
 
-                if (chestArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_CHEST)
-                } else if (handArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_HAND)
-                } else if (wristArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_WRIST)
-                } else if (stomachArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_STOMACH)
-                } else if (headArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_HEAD)
-                }
+//                if (chestArea.contains(touchX.toInt(), touchY.toInt())) {
+//                    showCustomDialog(Constants.POINT_AREA_CHEST)
+//                } else if (handArea.contains(touchX.toInt(), touchY.toInt())) {
+//                    showCustomDialog(Constants.POINT_AREA_HAND)
+//                } else if (wristArea.contains(touchX.toInt(), touchY.toInt())) {
+//                    showCustomDialog(Constants.POINT_AREA_WRIST)
+//                } else if (stomachArea.contains(touchX.toInt(), touchY.toInt())) {
+//                    showCustomDialog(Constants.POINT_AREA_STOMACH)
+//                } else if (headArea.contains(touchX.toInt(), touchY.toInt())) {
+//                    showCustomDialog(Constants.POINT_AREA_HEAD)
+//                }
                 Log.e("eleutheria", "touchX : $touchX, touchY : $touchY")
             }
             true
@@ -68,51 +68,51 @@ class DetailActivity : AppCompatActivity() {
         var strError : String = "0"
 
         when(index) {
-            Constants.POINT_AREA_CHEST -> {
-                val dataItem = Constants.golfData.chest
-                dataItem.let {
-                    strSimilarity = it.mean.toString()
-                    strError = it.max.toString()
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_1)
-            }
-            Constants.POINT_AREA_HAND -> {
-                val dataItem = Constants.golfData.hand
-                dataItem.let {
-                    strSimilarity = it.mean.toString()
-                    strError = it.max.toString()
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_2)
-            }
-            Constants.POINT_AREA_WRIST -> {
-                val dataItem = Constants.golfData.wrist
-                dataItem.let {
-                    strSimilarity = it.mean.toString()
-                    strError = it.max.toString()
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_3)
-            }
-            Constants.POINT_AREA_STOMACH -> {
-                val dataItem = Constants.golfData.stomach
-                dataItem.let {
-                    strSimilarity = it.mean.toString()
-                    strError = it.max.toString()
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_4)
-            }
-            Constants.POINT_AREA_HEAD -> {
-                val dataItem = Constants.golfData.head
-                dataItem.let {
-                    strSimilarity = it.mean.toString()
-                    strError = it.max.toString()
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_5)
-            }
+//            Constants.POINT_AREA_CHEST -> {
+//                val dataItem = Constants.LeisureData.chest
+//                dataItem.let {
+//                    strSimilarity = it.mean.toString()
+//                    strError = it.max.toString()
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup_1)
+//            }
+//            Constants.POINT_AREA_HAND -> {
+//                val dataItem = Constants.LeisureData.hand
+//                dataItem.let {
+//                    strSimilarity = it.mean.toString()
+//                    strError = it.max.toString()
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup_2)
+//            }
+//            Constants.POINT_AREA_WRIST -> {
+//                val dataItem = Constants.LeisureData.wrist
+//                dataItem.let {
+//                    strSimilarity = it.mean.toString()
+//                    strError = it.max.toString()
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup_3)
+//            }
+//            Constants.POINT_AREA_STOMACH -> {
+//                val dataItem = Constants.LeisureData.stomach
+//                dataItem.let {
+//                    strSimilarity = it.mean.toString()
+//                    strError = it.max.toString()
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup_4)
+//            }
+//            Constants.POINT_AREA_HEAD -> {
+//                val dataItem = Constants.LeisureData.head
+//                dataItem.let {
+//                    strSimilarity = it.mean.toString()
+//                    strError = it.max.toString()
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup_5)
+//            }
         }
 
         // Create the dialog

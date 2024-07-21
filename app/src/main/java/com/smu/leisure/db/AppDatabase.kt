@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [GolfEntity::class], version = 1)
+@Database(entities = [LeisureEntity::class], version = 1)
 @TypeConverters(MeasurementTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun getGolfDao() : GolfDao
+    abstract fun getLeisureDao() : LeisureDao
 
     companion object {
-        val databaseName = "db_golf"
+        val databaseName = "db_leisure"
         var appDatabase : AppDatabase? = null
 
         fun getInstance(context: Context) : AppDatabase? {

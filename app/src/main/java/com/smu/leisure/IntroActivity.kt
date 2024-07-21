@@ -25,7 +25,7 @@ class IntroActivity : AppCompatActivity() {
     var REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
         )
     } else {
         TODO("VERSION.SDK_INT < S")

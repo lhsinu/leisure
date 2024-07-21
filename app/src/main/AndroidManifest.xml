@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Leisure"
         tools:ignore="LockedOrientationActivity"
-        tools:targetApi="31">
+        android:requestLegacyExternalStorage="true"
+        tools:targetApi="3">
         <activity
             android:name=".DetailActivity"
             android:exported="false"

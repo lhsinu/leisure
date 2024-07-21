@@ -2,27 +2,20 @@
     <string name="app_name">Leisure</string>
 
     <string name="app_common_percentage">%</string>
+    <string name="app_common_degree">°</string>
 
-    <string name="app_main_draw">DRAW</string>
-    <string name="app_main_fade">FADE</string>
-    <string name="app_main_layup">LAYUP</string>
-    <string name="app_main_punch">PUNCH</string>
-    <string name="app_main_chip">CHIP</string>
-    <string name="app_main_pitch">PITCH</string>
-    <string name="app_main_flop">FLOP</string>
+    <string name="app_emergency_default">부상상황</string>
 
 
     <string name="strDataDateDefault">2023.11.14</string>
-    <string name="app_data_download">다운 가능</string>
-    <string name="app_data_downloaded">다운 완료</string>
-    <string name="app_data_download_button">다운</string>
-    <string name="app_data_title">Swing Data List</string>
-    <string name="app_data_type_default">PUNCH</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="app_data_title">Leisure Data List</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <string name="str_wound">부상상황</string>
+    <string name="str_emergency">위급상황</string>
+
+
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
