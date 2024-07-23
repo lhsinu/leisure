@@ -4,7 +4,7 @@
     android:layout_width="800dp"
     android:layout_height="700dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/popup_1">
+    android:background="@drawable/popup">
 
     <TextView
         android:id="@+id/tvDegree"

@@ -1,16 +1,21 @@
 package com.smu.leisure
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.smu.leisure.base.ClickableArea
 import com.smu.leisure.base.CommonUtils
 import com.smu.leisure.base.Constants
 import com.smu.leisure.base.Measurement
@@ -22,6 +27,7 @@ import java.io.BufferedWriter
 import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.util.ArrayList
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
@@ -31,6 +37,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     lateinit var db : AppDatabase
     lateinit var leisureDao: LeisureDao
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,41 +47,194 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         db = AppDatabase.getInstance(applicationContext)!!
         leisureDao = db.getLeisureDao()
 
+        settingAreas()
+
+//        binding.ivHuman.post(Runnable() {
+//            run() {
+//                Constants.ivHumanWidth = binding.ivHuman.width
+//                Constants.ivHumanHeight = binding.ivHuman.height
+//                val displayMetrics : DisplayMetrics = resources.displayMetrics
+//
+//                Log.e("eleutheria", "width : ${Constants.ivHumanWidth}, height : ${Constants.ivHumanHeight}")
+//                Log.e("eleutheria", "screenwidth : ${displayMetrics.widthPixels}, screenheight : ${displayMetrics.heightPixels}")
+//            }
+//        });
+
         binding.ivHuman.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val touchX = motionEvent.x
                 val touchY = motionEvent.y
-
-                val chestArea = Rect(420, 310, 720, 680) // Example coordinates
-                val handArea = Rect(700, 910, 830, 1060) // Example coordinates
-                val wristArea = Rect(750, 620, 850, 850) // Example coordinates
-                val stomachArea = Rect(420, 690, 720, 900) // Example coordinates
-                val headArea = Rect(490, 50, 680, 250) // Example coordinates
-
-                if (chestArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_S01)
-                } else if (handArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_S02)
-                } else if (wristArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_S03)
-                } else if (stomachArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_S04)
-                } else if (headArea.contains(touchX.toInt(), touchY.toInt())) {
-                    showCustomDialog(Constants.POINT_AREA_S05)
-                }
+                
+                handleImageClick(touchX, touchY)
             }
             true
         }
 
         binding.btConnect.setOnClickListener(this)
         binding.btData.setOnClickListener(this)
+        binding.btSetting.setOnClickListener(this)
 
+        // Temp Test Data
         Constants.fSelIndex.add(12.3f)
         Constants.fSelIndex.add(4.7f)
         Constants.fSelIndex.add(6.3f)
         Constants.fSelIndex.add(11.8f)
         Constants.fSelIndex.add(9.4f)
+        Constants.fSelIndex.add(16.4f)
+        Constants.fSelIndex.add(7.1f)
+        Constants.fSelIndex.add(8.3f)
+        Constants.fSelIndex.add(18.8f)
+        Constants.fSelIndex.add(12.4f)
+        Constants.fSelIndex.add(6.3f)
+        Constants.fSelIndex.add(9.7f)
+        Constants.fSelIndex.add(10.2f)
+        Constants.fSelIndex.add(13.2f)
+        Constants.fSelIndex.add(1.9f)
+        Constants.fSelIndex.add(15.8f)
     }
+
+    private fun settingAreas() {
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S01_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S01_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S01_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S01_BOTTOM_DP),
+                ::s01Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S02_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S02_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S02_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S02_BOTTOM_DP),
+                ::s02Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S03_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S03_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S03_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S03_BOTTOM_DP),
+                ::s03Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S04_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S04_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S04_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S04_BOTTOM_DP),
+                ::s04Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S05_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S05_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S05_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S05_BOTTOM_DP),
+                ::s05Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S06_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S06_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S06_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S06_BOTTOM_DP),
+                ::s06Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S07_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S07_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S07_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S07_BOTTOM_DP),
+                ::s07Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S08_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S08_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S08_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S08_BOTTOM_DP),
+                ::s08Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S09_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S09_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S09_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S09_BOTTOM_DP),
+                ::s09Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S10_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S10_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S10_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S10_BOTTOM_DP),
+                ::s10Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S11_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S11_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S11_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S11_BOTTOM_DP),
+                ::s11Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S12_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S12_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S12_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S12_BOTTOM_DP),
+                ::s12Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S13_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S13_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S13_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S13_BOTTOM_DP),
+                ::s13Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S14_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S14_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S14_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S14_BOTTOM_DP),
+                ::s14Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S15_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S15_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S15_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S15_BOTTOM_DP),
+                ::s15Click)
+        )
+        Constants.arClickArea.add(
+            ClickableArea(
+                commonUtils.convertDpToPx(this, Constants.S16_LEFT_DP),
+                commonUtils.convertDpToPx(this, Constants.S16_TOP_DP),
+                commonUtils.convertDpToPx(this, Constants.S16_RIGHT_DP),
+                commonUtils.convertDpToPx(this, Constants.S16_BOTTOM_DP),
+                ::s16Click)
+        )
+    }
+
+    private fun handleImageClick(touchX: Float, touchY: Float) {
+        for (area in Constants.arClickArea) {
+            if(area.contains(touchX, touchY)) {
+                area.performAction()
+                return
+            }
+        }
+        Toast.makeText(this, "Clicked Outside", Toast.LENGTH_SHORT).show()
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         ObNetworkClient.disconnect()
@@ -93,6 +253,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
 //                insertTestData()
             }
+            R.id.btSetting -> {
+                val intent = Intent(this@MainActivity, SettingActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -107,31 +271,97 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S01 - 1]
                 strDegree = dataItem.toString()
                 // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_1)
+                dialogRoot.setBackgroundResource(R.drawable.popup)
             }
             Constants.POINT_AREA_S02 -> {
                 val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S02 - 1]
                 strDegree = dataItem.toString()
                 // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_2)
+                dialogRoot.setBackgroundResource(R.drawable.popup)
             }
             Constants.POINT_AREA_S03 -> {
                 val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S03 - 1]
                 strDegree = dataItem.toString()
                 // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_3)
+                dialogRoot.setBackgroundResource(R.drawable.popup)
             }
             Constants.POINT_AREA_S04 -> {
                 val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S04 - 1]
                 strDegree = dataItem.toString()
                 // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_4)
+                dialogRoot.setBackgroundResource(R.drawable.popup)
             }
             Constants.POINT_AREA_S05 -> {
                 val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S05 - 1]
                 strDegree = dataItem.toString()
                 // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup_5)
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S06 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S06 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S07 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S07 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S08 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S08 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S09 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S09 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S10 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S10 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S11 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S11 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S12 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S12 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S13 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S13 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S14 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S14 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S15 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S15 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
+            }
+            Constants.POINT_AREA_S16 -> {
+                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S16 - 1]
+                strDegree = dataItem.toString()
+                // Change the background image
+                dialogRoot.setBackgroundResource(R.drawable.popup)
             }
         }
 
@@ -256,6 +486,70 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         }.start()
     }
 
+    private fun s01Click() {
+        showCustomDialog(Constants.POINT_AREA_S01)
+    }
+
+    private fun s02Click() {
+        showCustomDialog(Constants.POINT_AREA_S02)
+    }
+
+    private fun s03Click() {
+        showCustomDialog(Constants.POINT_AREA_S03)
+    }
+
+    private fun s04Click() {
+        showCustomDialog(Constants.POINT_AREA_S04)
+    }
+
+    private fun s05Click() {
+        showCustomDialog(Constants.POINT_AREA_S05)
+    }
+
+    private fun s06Click() {
+        showCustomDialog(Constants.POINT_AREA_S06)
+    }
+
+    private fun s07Click() {
+        showCustomDialog(Constants.POINT_AREA_S07)
+    }
+
+    private fun s08Click() {
+        showCustomDialog(Constants.POINT_AREA_S08)
+    }
+
+    private fun s09Click() {
+        showCustomDialog(Constants.POINT_AREA_S09)
+    }
+
+    private fun s10Click() {
+        showCustomDialog(Constants.POINT_AREA_S10)
+    }
+
+    private fun s11Click() {
+        showCustomDialog(Constants.POINT_AREA_S11)
+    }
+
+    private fun s12Click() {
+        showCustomDialog(Constants.POINT_AREA_S12)
+    }
+
+    private fun s13Click() {
+        showCustomDialog(Constants.POINT_AREA_S13)
+    }
+
+    private fun s14Click() {
+        showCustomDialog(Constants.POINT_AREA_S14)
+    }
+
+    private fun s15Click() {
+        showCustomDialog(Constants.POINT_AREA_S15)
+    }
+
+    private fun s16Click() {
+        showCustomDialog(Constants.POINT_AREA_S16)
+    }
+
     fun insertTestData() {
 
         val createddate = commonUtils.getCurrentDateTime()
@@ -277,6 +571,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         val s15 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s16 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
 
+        Log.e("eleutheria", "strEmergency : $strEmergency")
         Thread {
             leisureDao.insertTodo(
                 LeisureEntity(

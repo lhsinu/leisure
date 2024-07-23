@@ -12,15 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:clickable="true"
         android:focusable="true"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/llConnect"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/icon_body" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -48,9 +49,173 @@
             android:layout_margin="5dp"
             android:background="@drawable/selector_button_data"
             android:layout_weight="1"/>
-        <View
+
+        <Button
+            android:id="@+id/btSetting"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/selector_button_button"
             android:layout_weight="1"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:id="@+id/vClick01"
+        android:layout_width="85dp"
+        android:layout_height="79dp"
+        android:layout_marginLeft="176dp"
+        android:background="#44FF0000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick02"
+        android:layout_width="86dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="176dp"
+        android:layout_marginTop="79dp"
+        android:background="#44FFFF00"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick03"
+        android:layout_width="133dp"
+        android:layout_height="181dp"
+        android:layout_marginLeft="152dp"
+        android:layout_marginTop="102dp"
+        android:background="#44FFFF66"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick04"
+        android:layout_width="143dp"
+        android:layout_height="88dp"
+        android:layout_marginLeft="148dp"
+        android:layout_marginTop="283dp"
+        android:background="#4400FFFF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick05"
+        android:layout_width="35dp"
+        android:layout_height="131dp"
+        android:layout_marginLeft="285dp"
+        android:layout_marginTop="124dp"
+        android:background="#440000FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick06"
+        android:layout_width="37dp"
+        android:layout_height="127dp"
+        android:layout_marginLeft="115dp"
+        android:layout_marginTop="124dp"
+        android:background="#44FF00FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick07"
+        android:layout_width="36dp"
+        android:layout_height="99dp"
+        android:layout_marginLeft="290dp"
+        android:layout_marginTop="255dp"
+        android:background="#44FF0000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick08"
+        android:layout_width="38dp"
+        android:layout_height="68dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="252dp"
+        android:background="#44FFFF00"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick09"
+        android:layout_width="40dp"
+        android:layout_height="89dp"
+        android:layout_marginLeft="278dp"
+        android:layout_marginTop="354dp"
+        android:background="#44FFFFFF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick10"
+        android:layout_width="43dp"
+        android:layout_height="57dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginTop="320dp"
+        android:background="#4400FFFF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick11"
+        android:layout_width="74dp"
+        android:layout_height="155dp"
+        android:layout_marginLeft="224dp"
+        android:layout_marginTop="370dp"
+        android:background="#440000FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick12"
+        android:layout_width="67dp"
+        android:layout_height="152dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="371dp"
+        android:background="#44FF0000"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick13"
+        android:layout_width="56dp"
+        android:layout_height="163dp"
+        android:layout_marginLeft="246dp"
+        android:layout_marginTop="525dp"
+        android:background="#44FFFF00"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick14"
+        android:layout_width="50dp"
+        android:layout_height="159dp"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="524dp"
+        android:background="#44FF66FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick15"
+        android:layout_width="53dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="255dp"
+        android:layout_marginTop="689dp"
+        android:background="#44FF00FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vClick16"
+        android:layout_width="60dp"
+        android:layout_height="37dp"
+        android:layout_marginLeft="138dp"
+        android:layout_marginTop="684dp"
+        android:background="#440000FF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
