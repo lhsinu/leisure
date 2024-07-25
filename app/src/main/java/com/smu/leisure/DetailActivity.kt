@@ -16,7 +16,6 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
-    var mapDetailIndex = mutableMapOf<Int, Pair<String, String>>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,94 +24,43 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mapDetailIndex[1] = Pair("16", "18")
-        mapDetailIndex[2] = Pair("26", "28")
-        mapDetailIndex[3] = Pair("36", "38")
-        mapDetailIndex[4] = Pair("46", "48")
-        mapDetailIndex[5] = Pair("56", "58")
+        binding.tvS01.text = Constants.LeisureData.s01.toString()
+        binding.tvS02.text = Constants.LeisureData.s02.toString()
+        binding.tvS03.text = Constants.LeisureData.s03.toString()
+        binding.tvS04.text = Constants.LeisureData.s04.toString()
+        binding.tvS05.text = Constants.LeisureData.s05.toString()
+        binding.tvS06.text = Constants.LeisureData.s06.toString()
+        binding.tvS07.text = Constants.LeisureData.s07.toString()
+        binding.tvS08.text = Constants.LeisureData.s08.toString()
+        binding.tvS09.text = Constants.LeisureData.s09.toString()
+        binding.tvS10.text = Constants.LeisureData.s10.toString()
+        binding.tvS11.text = Constants.LeisureData.s11.toString()
+        binding.tvS12.text = Constants.LeisureData.s12.toString()
+        binding.tvS13.text = Constants.LeisureData.s13.toString()
+        binding.tvS14.text = Constants.LeisureData.s14.toString()
+        binding.tvS15.text = Constants.LeisureData.s15.toString()
+        binding.tvS16.text = Constants.LeisureData.s16.toString()
 
-        binding.ivDetailHuman.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val touchX = motionEvent.x
-                val touchY = motionEvent.y
 
-                val chestArea = Rect(390, 380, 730, 820) // Example coordinates
-                val handArea = Rect(770, 1120, 870, 1300) // Example coordinates
-                val wristArea = Rect(770, 770, 910, 1050) // Example coordinates
-                val stomachArea = Rect(400, 850, 730, 1060) // Example coordinates
-                val headArea = Rect(470, 40, 680, 300) // Example coordinates
-
-//                if (chestArea.contains(touchX.toInt(), touchY.toInt())) {
-//                    showCustomDialog(Constants.POINT_AREA_CHEST)
-//                } else if (handArea.contains(touchX.toInt(), touchY.toInt())) {
-//                    showCustomDialog(Constants.POINT_AREA_HAND)
-//                } else if (wristArea.contains(touchX.toInt(), touchY.toInt())) {
-//                    showCustomDialog(Constants.POINT_AREA_WRIST)
-//                } else if (stomachArea.contains(touchX.toInt(), touchY.toInt())) {
-//                    showCustomDialog(Constants.POINT_AREA_STOMACH)
-//                } else if (headArea.contains(touchX.toInt(), touchY.toInt())) {
-//                    showCustomDialog(Constants.POINT_AREA_HEAD)
-//                }
-                Log.e("eleutheria", "touchX : $touchX, touchY : $touchY")
-            }
-            true
-        }
+//        binding.ivDetailHuman.setOnTouchListener { view, motionEvent ->
+//            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
+//                val touchX = motionEvent.x
+//                val touchY = motionEvent.y
+//
+//                Log.e("eleutheria", "touchX : $touchX, touchY : $touchY")
+//            }
+//            true
+//        }
     }
 
     private fun showCustomDialog(index : Int) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_custom, null)
-        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialog)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_custom_degree, null)
+        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialogDegree)
 
-        var strMainMessage = "PERCENTAGE"
-        var strSimilarity : String = "0"
-        var strError : String = "0"
+        var strAngle = "0.0f"
 
         when(index) {
-//            Constants.POINT_AREA_CHEST -> {
-//                val dataItem = Constants.LeisureData.chest
-//                dataItem.let {
-//                    strSimilarity = it.mean.toString()
-//                    strError = it.max.toString()
-//                }
-//                // Change the background image
-//                dialogRoot.setBackgroundResource(R.drawable.popup_1)
-//            }
-//            Constants.POINT_AREA_HAND -> {
-//                val dataItem = Constants.LeisureData.hand
-//                dataItem.let {
-//                    strSimilarity = it.mean.toString()
-//                    strError = it.max.toString()
-//                }
-//                // Change the background image
-//                dialogRoot.setBackgroundResource(R.drawable.popup_2)
-//            }
-//            Constants.POINT_AREA_WRIST -> {
-//                val dataItem = Constants.LeisureData.wrist
-//                dataItem.let {
-//                    strSimilarity = it.mean.toString()
-//                    strError = it.max.toString()
-//                }
-//                // Change the background image
-//                dialogRoot.setBackgroundResource(R.drawable.popup_3)
-//            }
-//            Constants.POINT_AREA_STOMACH -> {
-//                val dataItem = Constants.LeisureData.stomach
-//                dataItem.let {
-//                    strSimilarity = it.mean.toString()
-//                    strError = it.max.toString()
-//                }
-//                // Change the background image
-//                dialogRoot.setBackgroundResource(R.drawable.popup_4)
-//            }
-//            Constants.POINT_AREA_HEAD -> {
-//                val dataItem = Constants.LeisureData.head
-//                dataItem.let {
-//                    strSimilarity = it.mean.toString()
-//                    strError = it.max.toString()
-//                }
-//                // Change the background image
-//                dialogRoot.setBackgroundResource(R.drawable.popup_5)
-//            }
+
         }
 
         // Create the dialog
@@ -121,13 +69,10 @@ class DetailActivity : AppCompatActivity() {
         dialog.setCancelable(true) // Set to false if you don't want it to be dismissible
 
         // Access TextViews if you need to set text dynamically
-        val tvSimilarity = dialogView.findViewById<TextView>(R.id.tvSimilarity)
-        val tvErrorRate = dialogView.findViewById<TextView>(R.id.tvErrorRate)
+        val tvDegree = dialogView.findViewById<TextView>(R.id.tvDegree)
 
-        val strSimilarityP = strSimilarity + getString(R.string.app_common_percentage)
-        val strErrorP = strError + getString(R.string.app_common_percentage)
-        tvSimilarity.text = strSimilarityP
-        tvErrorRate.text = strErrorP
+        val strAngleDegree = strAngle + getString(R.string.app_common_degree)
+        tvDegree.text = strAngleDegree
 
         // Show the dialog
         dialog.show()

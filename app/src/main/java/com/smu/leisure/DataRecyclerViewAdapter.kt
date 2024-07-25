@@ -27,7 +27,7 @@ class DataRecyclerViewAdapter(private val context: Context, private val dataList
 
         holder.tvTitle.text = leisureData.createddate
 
-        if(leisureData.emergency == '1') {
+        if(leisureData.emergency == 1) {
             val strEmergency = context.getString(R.string.str_wound)
             holder.tvEmergency.text = strEmergency
         } else {

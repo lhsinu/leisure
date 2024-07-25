@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class LeisureEntity(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
     @ColumnInfo(name="createddate") val createddate: String,
-    @ColumnInfo(name="emergency") val emergency: Char,
+    @ColumnInfo(name="emergency") val emergency: Int,
     @ColumnInfo(name="s01") val s01: Float,
     @ColumnInfo(name="s02") val s02: Float,
     @ColumnInfo(name="s03") val s03: Float,

@@ -120,7 +120,7 @@ class Constants {
         var LeisureData: LeisureEntity = LeisureEntity(
             1,
             "0",
-            '1',
+            1,
             0.0f,
             0.0f,
             0.0f,
@@ -144,7 +144,7 @@ class Constants {
         var arClickArea = ArrayList<ClickableArea>()
 
         var recentCreateddate = ""
-        var emergency : Char = '1'
+        var emergency : Int = 1
         var s01 = 0.0f
         var s02 = 0.0f
         var s03 = 0.0f

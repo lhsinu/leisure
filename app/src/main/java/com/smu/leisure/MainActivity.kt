@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.gson.Gson
@@ -235,6 +236,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     }
 
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                finishAffinity()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
     override fun onDestroy() {
         super.onDestroy()
         ObNetworkClient.disconnect()
@@ -243,15 +258,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     override fun onClick(p0: View?) {
         when(p0!!.id) {
             R.id.btConnect -> {
-                Thread {
-                    ObNetworkClient.connect(Constants.NETWORK_IP, Constants.NETWORK_PORT, applicationContext)
-                }.start()
+//                Thread {
+//                    ObNetworkClient.connect(Constants.NETWORK_IP, Constants.NETWORK_PORT, applicationContext)
+//                }.start()
+                insertTestData()
             }
             R.id.btData -> {
                 val intent = Intent(this@MainActivity, DataActivity::class.java)
                 startActivity(intent)
 
-//                insertTestData()
             }
             R.id.btSetting -> {
                 val intent = Intent(this@MainActivity, SettingActivity::class.java)
@@ -451,7 +466,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private fun saveRecentData(strFileName : String, strType : String) {
         Constants.recentCreateddate = strFileName
-        Constants.emergency = '1'
+        Constants.emergency = 1
     }
 
     private fun connectClient() {
@@ -553,7 +568,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     fun insertTestData() {
 
         val createddate = commonUtils.getCurrentDateTime()
-        val strEmergency = Random.nextInt(1, 3).toChar()
+        val nEmergency = Random.nextInt(1, 3)
         val s01 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s02 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s03 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
@@ -571,13 +586,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         val s15 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s16 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
 
-        Log.e("eleutheria", "strEmergency : $strEmergency")
+        Log.e("eleutheria", "strEmergency : $nEmergency")
         Thread {
             leisureDao.insertTodo(
                 LeisureEntity(
                     null,
                     createddate,
-                    strEmergency,
+                    nEmergency,
                     s01,
                     s02,
                     s03,
