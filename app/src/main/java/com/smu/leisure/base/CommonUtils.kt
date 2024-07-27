@@ -63,21 +63,21 @@ class CommonUtils {
         val longitude = locationProvider.getLocationLongitude()
 
         Locale.setDefault(Locale("en", "GB"))
-        val new_locale = Locale.getDefault()
-        val geocoder = Geocoder(MyApplication.ApplicationContext(), new_locale)
+        val newLocale = Locale.getDefault()
+        val geocoder = Geocoder(MyApplication.ApplicationContext(), newLocale)
 
         val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)!!
         var strAddress = MyApplication.ApplicationContext().getString(R.string.strAccidentAddress)
 
-        if(addresses.size > 0) {
+        if(addresses.isNotEmpty()) {
             strAddress = addresses[0].getAddressLine(0)
         }
 
         val message = "Emergency!! I need rescue!! track my location!! Location : $strAddress"
         val strFirstString = str119Number.substring(0, 1)
 
-        if(strFirstString.equals("0")) {
-            Log.e("eleutheria", "str119Number : $str119Number")
+        if(strFirstString == "0") {
+            Log.e("eleutheria", "str119Number : $str119Number, message : $message")
             smsManager.sendTextMessage(str119Number, null, message, null, null)
         }
     }
