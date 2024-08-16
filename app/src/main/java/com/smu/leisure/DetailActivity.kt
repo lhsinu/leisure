@@ -1,23 +1,16 @@
 package com.smu.leisure
 
-import android.annotation.SuppressLint
-import android.app.Dialog
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import com.smu.leisure.base.CommonUtils
 import com.smu.leisure.base.Constants
 import com.smu.leisure.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private var commonUtils = CommonUtils()
 
-
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,40 +34,6 @@ class DetailActivity : AppCompatActivity() {
         binding.tvS15.text = Constants.LeisureData.s15.toString()
         binding.tvS16.text = Constants.LeisureData.s16.toString()
 
-
-//        binding.ivDetailHuman.setOnTouchListener { view, motionEvent ->
-//            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
-//                val touchX = motionEvent.x
-//                val touchY = motionEvent.y
-//
-//                Log.e("eleutheria", "touchX : $touchX, touchY : $touchY")
-//            }
-//            true
-//        }
-    }
-
-    private fun showCustomDialog(index : Int) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_custom_degree, null)
-        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialogDegree)
-
-        var strAngle = "0.0f"
-
-        when(index) {
-
-        }
-
-        // Create the dialog
-        val dialog = Dialog(this)
-        dialog.setContentView(dialogView)
-        dialog.setCancelable(true) // Set to false if you don't want it to be dismissible
-
-        // Access TextViews if you need to set text dynamically
-        val tvDegree = dialogView.findViewById<TextView>(R.id.tvDegree)
-
-        val strAngleDegree = strAngle + getString(R.string.app_common_degree)
-        tvDegree.text = strAngleDegree
-
-        // Show the dialog
-        dialog.show()
     }
 }
+

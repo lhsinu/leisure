@@ -3,7 +3,6 @@ package com.smu.leisure
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -14,30 +13,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.gson.Gson
-import com.google.gson.JsonParser
 import com.smu.leisure.base.ClickableArea
 import com.smu.leisure.base.CommonUtils
 import com.smu.leisure.base.Constants
-import com.smu.leisure.base.Measurement
 import com.smu.leisure.databinding.ActivityMainBinding
 import com.smu.leisure.db.AppDatabase
 import com.smu.leisure.db.LeisureDao
 import com.smu.leisure.db.LeisureEntity
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketAddress
-import java.util.ArrayList
 import kotlin.random.Random
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
     private lateinit var binding: ActivityMainBinding
@@ -56,27 +49,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         db = AppDatabase.getInstance(applicationContext)!!
         leisureDao = db.getLeisureDao()
 
-        settingAreas()
-
-//        binding.ivHuman.post(Runnable() {
-//            run() {
-//                Constants.ivHumanWidth = binding.ivHuman.width
-//                Constants.ivHumanHeight = binding.ivHuman.height
-//                val displayMetrics : DisplayMetrics = resources.displayMetrics
-//
-//                Log.e("eleutheria", "width : ${Constants.ivHumanWidth}, height : ${Constants.ivHumanHeight}")
-//                Log.e("eleutheria", "screenwidth : ${displayMetrics.widthPixels}, screenheight : ${displayMetrics.heightPixels}")
-//            }
-//        });
-
         binding.ivHuman.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val touchX = motionEvent.x
                 val touchY = motionEvent.y
-                
+
                 handleImageClick(touchX, touchY)
             }
             true
+        }
+
+        binding.ivHuman.post {
+            // Now you can get the width and height
+            Constants.ivHumanWidth = binding.ivHuman.width
+            Constants.ivHumanHeight = binding.ivHuman.height
+
+            settingAreas()
         }
 
         binding.btStart.setOnClickListener(this)
@@ -105,130 +93,136 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     private fun settingAreas() {
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S01_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S01_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S01_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S01_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S01_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S01_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S01_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S01_BOTTOM_DP),
                 ::s01Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S02_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S02_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S02_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S02_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S02_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S02_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S02_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S02_BOTTOM_DP),
                 ::s02Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S03_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S03_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S03_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S03_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S03_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S03_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S03_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S03_BOTTOM_DP),
                 ::s03Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S04_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S04_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S04_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S04_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S04_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S04_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S04_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S04_BOTTOM_DP),
                 ::s04Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S05_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S05_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S05_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S05_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S05_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S05_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S05_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S05_BOTTOM_DP),
                 ::s05Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S06_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S06_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S06_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S06_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S06_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S06_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S06_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S06_BOTTOM_DP),
                 ::s06Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S07_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S07_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S07_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S07_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S07_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S07_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S07_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S07_BOTTOM_DP),
                 ::s07Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S08_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S08_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S08_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S08_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S08_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S08_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S08_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S08_BOTTOM_DP),
                 ::s08Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S09_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S09_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S09_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S09_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S09_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S09_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S09_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S09_BOTTOM_DP),
                 ::s09Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S10_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S10_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S10_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S10_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S10_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S10_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S10_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S10_BOTTOM_DP),
                 ::s10Click)
         )
+
+        Log.e("eleutheria", "11")
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S11_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S11_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S11_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S11_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S11_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S11_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S11_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S11_BOTTOM_DP),
                 ::s11Click)
         )
+        Log.e("eleutheria", "12")
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S12_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S12_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S12_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S12_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S12_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S12_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S12_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S12_BOTTOM_DP),
                 ::s12Click)
         )
+        Log.e("eleutheria", "13")
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S13_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S13_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S13_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S13_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S13_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S13_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S13_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S13_BOTTOM_DP),
                 ::s13Click)
         )
+        Log.e("eleutheria", "14")
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S14_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S14_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S14_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S14_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S14_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S14_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S14_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S14_BOTTOM_DP),
                 ::s14Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S15_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S15_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S15_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S15_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S15_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S15_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S15_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S15_BOTTOM_DP),
                 ::s15Click)
         )
         Constants.arClickArea.add(
             ClickableArea(
-                commonUtils.convertDpToPx(this, Constants.S16_LEFT_DP),
-                commonUtils.convertDpToPx(this, Constants.S16_TOP_DP),
-                commonUtils.convertDpToPx(this, Constants.S16_RIGHT_DP),
-                commonUtils.convertDpToPx(this, Constants.S16_BOTTOM_DP),
+                commonUtils.calculateRatioX(this, Constants.S16_LEFT_DP),
+                commonUtils.calculateRatioY(this, Constants.S16_TOP_DP),
+                commonUtils.calculateRatioX(this, Constants.S16_RIGHT_DP),
+                commonUtils.calculateRatioY(this, Constants.S16_BOTTOM_DP),
+
                 ::s16Click)
         )
     }
@@ -269,13 +263,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 //                Thread {
 //                    ObNetworkClient.connect(Constants.NETWORK_IP, Constants.NETWORK_PORT, applicationContext)
 //                }.start()
-//                insertTestData()
+                insertTestData()
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    handleSocketCommunication()
-                }
-
-//                commonUtils.sendSMS()
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    handleSocketCommunication()
+//                }
             }
             R.id.btData -> {
                 val intent = Intent(this@MainActivity, DataActivity::class.java)
@@ -575,75 +567,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         // Show the dialog
         dialog.show()
     }
-
-//    private fun sendMessage(message: String) {
-//        Thread {
-//            ObNetworkClient.sendString(message)
-//
-//            val response = ObNetworkClient.receiveString()
-//            if(response != null) {
-//                if (response.contains("Chest")) {
-//                    val startIndex = response.indexOf('{')
-//                    if (startIndex != -1) {
-//                        // Extract the JSON part from the raw data
-//                        val jsonData = response.substring(startIndex)
-//                        val modifiedJsonData = jsonData.replace("Back of Hand", "Hand")
-//
-//                        val gson = Gson()
-//                        val jsonObject = JsonParser.parseString(modifiedJsonData).asJsonObject
-//
-//                        val chestJson = jsonObject.getAsJsonObject("Chest")
-//                        val chestData = gson.fromJson(chestJson, Measurement::class.java)
-//
-//                        val handJson = jsonObject.getAsJsonObject("Hand")
-//                        val handData = gson.fromJson(handJson, Measurement::class.java)
-//
-//                        val wristJson = jsonObject.getAsJsonObject("Wrist")
-//                        val wristData = gson.fromJson(wristJson, Measurement::class.java)
-//
-//                        val stomachJson = jsonObject.getAsJsonObject("Stomach")
-//                        val stomachData = gson.fromJson(stomachJson, Measurement::class.java)
-//
-//                        val headJson = jsonObject.getAsJsonObject("Head")
-//                        val headData = gson.fromJson(headJson, Measurement::class.java)
-//
-//                        // Assign the values to your variables
-//                        Constants.s01 = 0.0f
-//                        Constants.s02 = 0.0f
-//                        Constants.s03 = 0.0f
-//                        Constants.s04 = 0.0f
-//                        Constants.s05 = 0.0f
-//
-//                        Thread {
-//                            leisureDao.insertTodo(
-//                                LeisureEntity(
-//                                    null,
-//                                    Constants.recentCreateddate,
-//                                    Constants.emergency,
-//                                    Constants.s01,
-//                                    Constants.s02,
-//                                    Constants.s03,
-//                                    Constants.s04,
-//                                    Constants.s05,
-//                                    Constants.s06,
-//                                    Constants.s07,
-//                                    Constants.s08,
-//                                    Constants.s09,
-//                                    Constants.s10,
-//                                    Constants.s11,
-//                                    Constants.s12,
-//                                    Constants.s13,
-//                                    Constants.s14,
-//                                    Constants.s15,
-//                                    Constants.s16,
-//                                )
-//                            )
-//                        }.start()
-//                    }
-//                }
-//            }
-//        }.start()
-//    }
 
     private fun connectClient() {
         Thread {

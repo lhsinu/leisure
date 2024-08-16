@@ -8,6 +8,8 @@ import android.net.Uri
 import android.telephony.SmsManager
 import android.util.DisplayMetrics
 import android.util.Log
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.smu.leisure.R
 import java.io.BufferedWriter
@@ -42,6 +44,18 @@ class CommonUtils {
         bufferedWriter.close()
     }
 
+    fun convertDpToPxX(context: Context, dp: Float): Float {
+        val xDpi = context.resources.displayMetrics.xdpi
+        val densityX = xDpi / 160.0f
+        return dp * densityX + 0.5f
+    }
+
+    fun convertDpToPxY(context: Context, dp: Float): Float {
+        val yDpi = context.resources.displayMetrics.ydpi
+        val densityY = yDpi / 160.0f
+        return dp * densityY + 0.5f
+    }
+
     fun convertDpToPx(context: Context, dp : Float) : Float {
         val displayMetrics : DisplayMetrics = context.resources.displayMetrics
         return (dp * displayMetrics.density + 0.5f)
@@ -50,6 +64,23 @@ class CommonUtils {
     fun convertPxToDp(context: Context, px : Float) : Float {
         val displayMetrics : DisplayMetrics = context.resources.displayMetrics
         return (px / displayMetrics.density + 0.5f)
+    }
+
+    fun calculateRatioX(context: Context, px : Float) : Float {
+        val fRatio = px / Constants.ivHumanOriginalWidth
+        return Constants.ivHumanWidth * fRatio
+    }
+
+    fun calculateRatioY(context: Context, px : Float) : Float {
+        val fRatio = px / Constants.ivHumanOriginalHeight
+        return Constants.ivHumanHeight * fRatio
+    }
+
+    fun setTextViewPosition(textView: TextView, x: Int, y: Int) {
+        val layoutParams = textView.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.leftMargin = x
+        layoutParams.topMargin = y
+        textView.layoutParams = layoutParams
     }
 
     fun sendSMS() {
