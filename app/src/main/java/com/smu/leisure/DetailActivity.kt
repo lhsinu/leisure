@@ -31,8 +31,6 @@ class DetailActivity : AppCompatActivity() {
         binding.tvS12.text = Constants.LeisureData.s12.toString()
         binding.tvS13.text = Constants.LeisureData.s13.toString()
         binding.tvS14.text = Constants.LeisureData.s14.toString()
-        binding.tvS15.text = Constants.LeisureData.s15.toString()
-        binding.tvS16.text = Constants.LeisureData.s16.toString()
 
     }
 }

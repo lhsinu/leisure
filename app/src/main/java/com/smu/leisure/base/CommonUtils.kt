@@ -76,6 +76,16 @@ class CommonUtils {
         return Constants.ivHumanHeight * fRatio
     }
 
+    fun calculateScreenRatioX(context: Context, px : Float) : Float {
+        val fRatio = px / Constants.ivHumanOriginalWidth
+        return (Constants.ivHumanWidth * fRatio) + ((context.resources.displayMetrics.widthPixels / 2) - (Constants.ivHumanWidth / 2) - (Constants.ivEffectCenterWidth / 2))
+    }
+
+    fun calculateScreenRatioY(context: Context, px : Float) : Float {
+        val fRatio = px / Constants.ivHumanOriginalHeight
+        return (Constants.ivHumanHeight * fRatio) + ((context.resources.displayMetrics.heightPixels / 2) - (Constants.ivHumanHeight / 2) - (Constants.llConnectHeight) - (Constants.ivEffectCenterHeight / 2))
+    }
+
     fun setTextViewPosition(textView: TextView, x: Int, y: Int) {
         val layoutParams = textView.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.leftMargin = x

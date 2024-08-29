@@ -23,6 +23,4 @@ data class LeisureEntity(
     @ColumnInfo(name="s12") val s12: Float,
     @ColumnInfo(name="s13") val s13: Float,
     @ColumnInfo(name="s14") val s14: Float,
-    @ColumnInfo(name="s15") val s15: Float,
-    @ColumnInfo(name="s16") val s16: Float,
 )

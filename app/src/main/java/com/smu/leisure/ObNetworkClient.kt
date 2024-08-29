@@ -92,33 +92,6 @@ object ObNetworkClient {
                         val headJson = jsonObject.getAsJsonObject("Head")
                         val headData = gson.fromJson(headJson, Measurement::class.java)
 
-//                        Constants.recentChest = chestData
-//                        Constants.recentHand = handData
-//                        Constants.recentWrist = wristData
-//                        Constants.recentStomach = stomachData
-//                        Constants.recentHead = headData
-//
-//                        Constants.mapSelIndex[1] = Pair(chestData.mean.toString(), chestData.max.toString())
-//                        Constants.mapSelIndex[2] = Pair(handData.mean.toString(), handData.max.toString())
-//                        Constants.mapSelIndex[3] = Pair(wristData.mean.toString(), wristData.max.toString())
-//                        Constants.mapSelIndex[4] = Pair(stomachData.mean.toString(), stomachData.max.toString())
-//                        Constants.mapSelIndex[5] = Pair(headData.mean.toString(), headData.max.toString())
-
-//                        Thread {
-//                            swingDao.insertTodo(
-//                                LeisureEntity(
-//                                    null,
-//                                    Constants.recentCreateddate,
-//                                    Constants.recentbDownloaded,
-//                                    Constants.recentType,
-//                                    Constants.recentChest,
-//                                    Constants.recentHand,
-//                                    Constants.recentWrist,
-//                                    Constants.recentStomach,
-//                                    Constants.recentHead
-//                                )
-//                            )
-//                        }.start()
                     }
                 }
             }

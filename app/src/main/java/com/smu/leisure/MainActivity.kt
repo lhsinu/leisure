@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         db = AppDatabase.getInstance(applicationContext)!!
         leisureDao = db.getLeisureDao()
 
+        binding.main
         binding.ivHuman.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val touchX = motionEvent.x
@@ -64,9 +67,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             Constants.ivHumanWidth = binding.ivHuman.width
             Constants.ivHumanHeight = binding.ivHuman.height
 
+            Constants.llConnectWidth = binding.llConnect.width
+            Constants.llConnectHeight = binding.llConnect.height
+
+            Constants.ivEffectCenterWidth = commonUtils.calculateRatioX(this, 100.0f).toInt()
+            Constants.ivEffectCenterHeight = commonUtils.calculateRatioY(this, 100.0f).toInt()
+            Constants.ivEffectSideWidth = commonUtils.calculateRatioX(this, 100.0f).toInt()
+            Constants.ivEffectSideHeight = commonUtils.calculateRatioY(this, 100.0f).toInt()
+
             settingAreas()
         }
 
+        binding.ivHuman.post {
+            // Now you can get the width and height
+            Constants.ivHumanWidth = binding.ivHuman.width
+            Constants.ivHumanHeight = binding.ivHuman.height
+
+            settingAreas()
+        }
+
+        resources.displayMetrics.widthPixels
+
+        binding.btConnect.setOnClickListener(this)
         binding.btStart.setOnClickListener(this)
         binding.btData.setOnClickListener(this)
         binding.btSetting.setOnClickListener(this)
@@ -86,8 +108,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         Constants.fSelIndex.add(12.2f)
         Constants.fSelIndex.add(13.3f)
         Constants.fSelIndex.add(14.4f)
-        Constants.fSelIndex.add(15.5f)
-        Constants.fSelIndex.add(16.6f)
     }
 
     private fun settingAreas() {
@@ -171,8 +191,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 commonUtils.calculateRatioY(this, Constants.S10_BOTTOM_DP),
                 ::s10Click)
         )
-
-        Log.e("eleutheria", "11")
         Constants.arClickArea.add(
             ClickableArea(
                 commonUtils.calculateRatioX(this, Constants.S11_LEFT_DP),
@@ -181,7 +199,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 commonUtils.calculateRatioY(this, Constants.S11_BOTTOM_DP),
                 ::s11Click)
         )
-        Log.e("eleutheria", "12")
         Constants.arClickArea.add(
             ClickableArea(
                 commonUtils.calculateRatioX(this, Constants.S12_LEFT_DP),
@@ -190,7 +207,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 commonUtils.calculateRatioY(this, Constants.S12_BOTTOM_DP),
                 ::s12Click)
         )
-        Log.e("eleutheria", "13")
         Constants.arClickArea.add(
             ClickableArea(
                 commonUtils.calculateRatioX(this, Constants.S13_LEFT_DP),
@@ -199,7 +215,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 commonUtils.calculateRatioY(this, Constants.S13_BOTTOM_DP),
                 ::s13Click)
         )
-        Log.e("eleutheria", "14")
         Constants.arClickArea.add(
             ClickableArea(
                 commonUtils.calculateRatioX(this, Constants.S14_LEFT_DP),
@@ -208,23 +223,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 commonUtils.calculateRatioY(this, Constants.S14_BOTTOM_DP),
                 ::s14Click)
         )
-        Constants.arClickArea.add(
-            ClickableArea(
-                commonUtils.calculateRatioX(this, Constants.S15_LEFT_DP),
-                commonUtils.calculateRatioY(this, Constants.S15_TOP_DP),
-                commonUtils.calculateRatioX(this, Constants.S15_RIGHT_DP),
-                commonUtils.calculateRatioY(this, Constants.S15_BOTTOM_DP),
-                ::s15Click)
-        )
-        Constants.arClickArea.add(
-            ClickableArea(
-                commonUtils.calculateRatioX(this, Constants.S16_LEFT_DP),
-                commonUtils.calculateRatioY(this, Constants.S16_TOP_DP),
-                commonUtils.calculateRatioX(this, Constants.S16_RIGHT_DP),
-                commonUtils.calculateRatioY(this, Constants.S16_BOTTOM_DP),
-
-                ::s16Click)
-        )
+//        Constants.arClickArea.add(
+//            ClickableArea(
+//                commonUtils.calculateRatioX(this, Constants.S15_LEFT_DP),
+//                commonUtils.calculateRatioY(this, Constants.S15_TOP_DP),
+//                commonUtils.calculateRatioX(this, Constants.S15_RIGHT_DP),
+//                commonUtils.calculateRatioY(this, Constants.S15_BOTTOM_DP),
+//                ::s15Click)
+//        )
+//        Constants.arClickArea.add(
+//            ClickableArea(
+//                commonUtils.calculateRatioX(this, Constants.S16_LEFT_DP),
+//                commonUtils.calculateRatioY(this, Constants.S16_TOP_DP),
+//                commonUtils.calculateRatioX(this, Constants.S16_RIGHT_DP),
+//                commonUtils.calculateRatioY(this, Constants.S16_BOTTOM_DP),
+//
+//                ::s16Click)
+//        )
     }
 
     private fun handleImageClick(touchX: Float, touchY: Float) {
@@ -259,11 +274,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     override fun onClick(p0: View?) {
         when(p0!!.id) {
+            R.id.btConnect -> {
+                Toast.makeText(this, "Clicked Connect", Toast.LENGTH_SHORT).show()
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S01_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S01_Y_POINT).toInt(),)
+//                insertTestData()
+            }
+
             R.id.btStart -> {
+                Toast.makeText(this, "Clicked Start", Toast.LENGTH_SHORT).show()
 //                Thread {
 //                    ObNetworkClient.connect(Constants.NETWORK_IP, Constants.NETWORK_PORT, applicationContext)
 //                }.start()
-                insertTestData()
+//                insertTestData()
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S01_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S01_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S02_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S02_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S03_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S03_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S04_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S04_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S05_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S05_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_center, commonUtils.calculateScreenRatioX(this, Constants.S06_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S06_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_left, commonUtils.calculateScreenRatioX(this, Constants.S07_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S07_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_right, commonUtils.calculateScreenRatioX(this, Constants.S08_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S08_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_left, commonUtils.calculateScreenRatioX(this, Constants.S09_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S09_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_right, commonUtils.calculateScreenRatioX(this, Constants.S10_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S10_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_left, commonUtils.calculateScreenRatioX(this, Constants.S11_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S11_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_right, commonUtils.calculateScreenRatioX(this, Constants.S12_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S12_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_left, commonUtils.calculateScreenRatioX(this, Constants.S13_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S13_Y_POINT).toInt(),)
+//                drawEffect(binding.main, R.drawable.effect_right, commonUtils.calculateScreenRatioX(this, Constants.S14_X_POINT).toInt(), commonUtils.calculateScreenRatioY(this, Constants.S14_Y_POINT).toInt(),)
 
 //                CoroutineScope(Dispatchers.IO).launch {
 //                    handleSocketCommunication()
@@ -376,9 +412,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         val s12 = values["S12"]?.toFloatOrNull()
         val s13 = values["S13"]?.toFloatOrNull()
         val s14 = values["S14"]?.toFloatOrNull()
-        val s15 = values["S15"]?.toFloatOrNull()
-//        val s16 = values["S16"]?.toFloatOrNull()
-        val s16 = 16.124f
 
         Log.e("eleutheria", "createddate : $createddate, strEmergency : $nEmergency, s01 : $s01, s02 : $s02, s03 : $s03, s04 : $s04, s05 : $s05, s06 : $s06, s07 : $s07, s08 : $s08, s09 : $s09, s10 : $s10")
 //
@@ -398,8 +431,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             Constants.fSelIndex.add(s12!!)
             Constants.fSelIndex.add(s13!!)
             Constants.fSelIndex.add(s14!!)
-            Constants.fSelIndex.add(s15!!)
-            Constants.fSelIndex.add(s16!!)
         } else {
             Thread {
                 leisureDao.insertTodo(
@@ -421,8 +452,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                         s12!!,
                         s13!!,
                         s14!!,
-                        s15!!,
-                        s16!!,
                     )
                 )
             }.start()
@@ -535,20 +564,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 // Change the background image
                 dialogRoot.setBackgroundResource(R.drawable.popup)
             }
-            Constants.POINT_AREA_S15 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S15 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S15
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S16 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S16 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S16
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
+//            Constants.POINT_AREA_S15 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S15 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S15
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S16 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S16 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S16
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
         }
 
         // Create the dialog
@@ -655,13 +684,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     private fun s14Click() {
         showCustomDialog(Constants.POINT_AREA_S14)
     }
+//
+//    private fun s15Click() {
+//        showCustomDialog(Constants.POINT_AREA_S15)
+//    }
+//
+//    private fun s16Click() {
+//        showCustomDialog(Constants.POINT_AREA_S16)
+//    }
 
-    private fun s15Click() {
-        showCustomDialog(Constants.POINT_AREA_S15)
-    }
+    fun drawEffect(rootLayout: ConstraintLayout, imageResId: Int, x: Int, y: Int) {
+        // Create an ImageView dynamically
+        val dynamicImageView = ImageView(this).apply {
+            // Set the image resource
+            setImageResource(imageResId)
+            // Set layout parameters with specified size
+            layoutParams = ConstraintLayout.LayoutParams(
+                100, 100,
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                // Set margins (position on screen)
+                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                leftMargin = x
+                topMargin = y
+            }
+        }
 
-    private fun s16Click() {
-        showCustomDialog(Constants.POINT_AREA_S16)
+        // Add the ImageView to the root layout
+        rootLayout.addView(dynamicImageView)
+
+        // Use a Handler to remove the ImageView after 3 seconds
+        Handler(Looper.getMainLooper()).postDelayed({
+            // Remove the ImageView from the layout
+            rootLayout.removeView(dynamicImageView)
+        }, 3000)
     }
 
     fun insertTestData() {
@@ -682,10 +740,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         val s12 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s13 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
         val s14 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
-        val s15 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
-        val s16 = Random.nextFloat() * (10.0f - 0.1f) + 0.1f
 
-        Log.e("eleutheria", "strEmergency : $nEmergency")
         Thread {
             leisureDao.insertTodo(
                 LeisureEntity(
@@ -706,8 +761,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                     s12,
                     s13,
                     s14,
-                    s15,
-                    s16,
                 )
             )
         }.start()
