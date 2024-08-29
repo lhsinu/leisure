@@ -31,6 +31,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btConnect"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_start"
+            android:src="@drawable/icon_start_normal"  />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btStart"
             android:layout_width="match_parent"
             android:layout_height="40dp"
