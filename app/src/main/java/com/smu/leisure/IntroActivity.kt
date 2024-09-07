@@ -3,7 +3,9 @@ package com.smu.leisure
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
@@ -15,12 +17,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.smu.leisure.base.Constants
 import com.smu.leisure.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroBinding
 
     val PERMISSIONS_REQUEST_CODE = 100
+
+    private var settings: SharedPreferences? = null
 
     var REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         arrayOf(
@@ -54,6 +59,16 @@ class IntroActivity : AppCompatActivity() {
 
         binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        settings = getSharedPreferences(Constants.SHARED_PREF_SEUPDATA, Context.MODE_PRIVATE)
+
+        Constants.strEmergencyNumber =
+            settings!!.getString(Constants.PREF_EMERGENCY_CALL_NUMBER, Constants.strEmergencyNumber).toString()
+
+        Constants.MODULE_ADDRESS_WIFI_IP =
+            settings!!.getString(Constants.PREF_WIFI_DEVICE, Constants.default_wifi_ip).toString()
+        Constants.MODULE_ADDRESS_WIFI_PORT =
+            settings!!.getString(Constants.PREF_WIFIPORT_DEVICE, Constants.default_wifi_port).toString()
 
         checkAllPermissions()
     }

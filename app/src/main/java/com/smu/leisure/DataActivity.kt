@@ -56,28 +56,4 @@ class DataActivity : AppCompatActivity(), OnItemClickListener {
         val intent = Intent(this@DataActivity, DetailActivity::class.java)
         startActivity(intent)
     }
-
-//    override fun onDataButtonClick(position: Int) {
-//        val strCreatedDate = LeisureList[position].createddate
-//        val bDown = LeisureList[position].download
-//        val nId = LeisureList[position].id
-//        val strType = LeisureList[position].type
-//
-//        Thread {
-//            LeisureDao.updateDownloadTodo(nId!!, true)
-//        }.start()
-//
-//        Constants.strSaveFileName = strCreatedDate
-//
-//        Constants.nStatusIndex = Constants.STATUS_INDEX_RAWDATA
-//        sendMessage("send_$strType$strCreatedDate")
-//    }
-
-    private fun sendMessage(message: String) {
-        Thread {
-            ObNetworkClient.sendString(message)
-
-            val response = ObNetworkClient.receiveString()
-        }.start()
-    }
 }

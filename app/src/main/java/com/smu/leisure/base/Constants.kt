@@ -4,6 +4,10 @@ import com.smu.leisure.db.LeisureEntity
 
 class Constants {
     companion object {
+        val MILLISECOND_DRAW_EFFECT : Long                          = 1000
+
+        var bEmergency: Boolean                                     = false
+
         var ivHumanWidth = 0
         var ivHumanHeight = 0
         var ivHumanOriginalWidth = 507.0f
@@ -28,9 +32,14 @@ class Constants {
         var default_wifi_ip                                             = "192.168.4.1"
         var default_wifi_port                                           = "8088"
 
+        val STR_CONNECT                                                = "app"
+        val STR_START                                                  = "start"
 
-        var MODULE_ADDRESS_WIFI_CAM                                     = default_wifi_ip       // "192.168.4.1"
+        var MODULE_ADDRESS_WIFI_IP                                     = default_wifi_ip       // "192.168.4.1"
         var MODULE_ADDRESS_WIFI_PORT                                    = default_wifi_port     // "80"
+
+        var fNumberIndex                                            = listOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14")
+        var nListIndex : Int                                        = -1
 
         const val EFFECT_CENTER_WIDTH = 132.0f
         const val EFFECT_CENTER_HEIGHT = 122.0f
@@ -263,6 +272,11 @@ class Constants {
 
 
         // new 14 position
+
+        val SENSOR_X_POINT = listOf(254.0f, 254.0f, 160.0f, 352.0f, 72.0f, 48.0f, 18.0f, 440.0f, 462.0f, 492.0f, 146.0f, 134.0f, 360.0f, 376.0f)
+
+        val SENSOR_Y_POINT = listOf(210.0f, 646.0f, 848.0f, 848.0f, 340.0f, 602.0f, 846.0f, 340.0f, 602.0f, 846.0f, 1220.0f, 1638.0f, 1220.0f, 1638.0f)
+
         const val S01_X_POINT = 254.0f
         const val S01_Y_POINT = 210.0f
         const val S02_X_POINT = 254.0f
@@ -315,51 +329,49 @@ class Constants {
         const val STATUS_INDEX_RECEIVE : Int = 4
         const val STATUS_INDEX_RAWDATA : Int = 5
 
-        const val NETWORK_IP = "192.168.4.1" // Replace with the IP address you want to connect to
-        const val NETWORK_PORT = 8088 // Replace with the port number you want to connect to
 
 
         var LeisureData: LeisureEntity = LeisureEntity(
             1,
             "0",
-            1,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,)
+            "S",
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),
+            SensorData("S", 0.00, 0.00, 0.00),)
 
         var nStatusIndex : Int = STATUS_INDEX_IDLE
         var strSaveFileName : String = ""
-        var fSelIndex = ArrayList<Float>()
+        var fSelIndex = ArrayList<Double>()
         var arClickArea = ArrayList<ClickableArea>()
 
         var recentCreateddate = ""
         var recentEmergency : Int = 1
-        var recentS01 = 0.0f
-        var recentS02 = 0.0f
-        var recentS03 = 0.0f
-        var recentS04 = 0.0f
-        var recentS05 = 0.0f
-        var recentS06 = 0.0f
-        var recentS07 = 0.0f
-        var recentS08 = 0.0f
-        var recentS09 = 0.0f
-        var recentS10 = 0.0f
-        var recentS11 = 0.0f
-        var recentS12 = 0.0f
-        var recentS13 = 0.0f
-        var recentS14 = 0.0f
-        var recentS15 = 0.0f
-        var recentS16 = 0.0f
+        var recentS01 = 0.0
+        var recentS02 = 0.0
+        var recentS03 = 0.0
+        var recentS04 = 0.0
+        var recentS05 = 0.0
+        var recentS06 = 0.0
+        var recentS07 = 0.0
+        var recentS08 = 0.0
+        var recentS09 = 0.0
+        var recentS10 = 0.0
+        var recentS11 = 0.0
+        var recentS12 = 0.0
+        var recentS13 = 0.0
+        var recentS14 = 0.0
+        var recentS15 = 0.0
+        var recentS16 = 0.0
     }
 }

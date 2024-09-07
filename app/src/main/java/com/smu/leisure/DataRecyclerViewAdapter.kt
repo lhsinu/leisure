@@ -27,11 +27,11 @@ class DataRecyclerViewAdapter(private val context: Context, private val dataList
 
         holder.tvTitle.text = leisureData.createddate
 
-        if(leisureData.emergency == 1) {
-            val strEmergency = context.getString(R.string.str_wound)
+        if(leisureData.emergency == "D") {
+            val strEmergency = context.getString(R.string.str_danger)
             holder.tvEmergency.text = strEmergency
         } else {
-            val strEmergency = context.getString(R.string.str_emergency)
+            val strEmergency = context.getString(R.string.str_critical)
             holder.tvEmergency.text = strEmergency
         }
 

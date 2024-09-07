@@ -83,7 +83,7 @@ class CommonUtils {
 
     fun calculateScreenRatioY(context: Context, px : Float) : Float {
         val fRatio = px / Constants.ivHumanOriginalHeight
-        return (Constants.ivHumanHeight * fRatio) + ((context.resources.displayMetrics.heightPixels / 2) - (Constants.ivHumanHeight / 2) - (Constants.llConnectHeight) - (Constants.ivEffectCenterHeight / 2))
+        return (Constants.ivHumanHeight * fRatio) + ((context.resources.displayMetrics.heightPixels / 2) - (Constants.ivHumanHeight / 2) - (Constants.llConnectHeight))
     }
 
     fun setTextViewPosition(textView: TextView, x: Int, y: Int) {
@@ -124,7 +124,7 @@ class CommonUtils {
     }
 
     fun sendCall() {
-        var strPhoneNumber = Constants.strEmergencyNumber
+        val strPhoneNumber = Constants.strEmergencyNumber
 
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$strPhoneNumber"))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

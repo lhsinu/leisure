@@ -29,9 +29,9 @@ class SettingActivity : AppCompatActivity() {
 
         binding.tv119.text = settings!!.getString(Constants.PREF_EMERGENCY_CALL_NUMBER, Constants.strEmergencyNumber)
 
-        Log.e("eleutheria", "Setting Next str119Number : ${Constants.strEmergencyNumber}")
+        Log.e("eleutheria", "Setting Next str119Number : ${Constants.strEmergencyNumber}, MODULE_ADDRESS_WIFI_IP : ${Constants.MODULE_ADDRESS_WIFI_IP}, MODULE_ADDRESS_WIFI_PORT : ${Constants.MODULE_ADDRESS_WIFI_PORT}")
 
-        val strWifiData : String? = settings!!.getString(Constants.PREF_WIFI_DEVICE, Constants.MODULE_ADDRESS_WIFI_CAM)
+        val strWifiData : String? = settings!!.getString(Constants.PREF_WIFI_DEVICE, Constants.MODULE_ADDRESS_WIFI_IP)
         val strWifiPortData : String? = settings!!.getString(Constants.PREF_WIFIPORT_DEVICE, Constants.MODULE_ADDRESS_WIFI_PORT)
 
         binding.btContact.setOnClickListener {

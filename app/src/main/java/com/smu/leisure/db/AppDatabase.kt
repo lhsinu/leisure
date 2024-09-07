@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [LeisureEntity::class], version = 1)
-@TypeConverters(MeasurementTypeConverter::class)
+@TypeConverters(SensorDataTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getLeisureDao() : LeisureDao
 
