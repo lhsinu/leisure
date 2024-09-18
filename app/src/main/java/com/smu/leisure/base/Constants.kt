@@ -28,15 +28,22 @@ class Constants {
         val PREF_EMERGENCY_CALL_NUMBER : String                     = "prefEmergencyCallNumber"
         val PREF_WIFI_DEVICE : String                               = "prefWifiDevice"
         val PREF_WIFIPORT_DEVICE : String                           = "prefWifiPortDevice"
+        val PREF_ELAPSED_TIME : String                              = "prefElapsedTime"
 
         var default_wifi_ip                                             = "192.168.4.1"
         var default_wifi_port                                           = "8088"
+        var default_elapsedTime : Long                                  = 1000
 
         val STR_CONNECT                                                = "app"
         val STR_START                                                  = "start"
 
         var MODULE_ADDRESS_WIFI_IP                                     = default_wifi_ip       // "192.168.4.1"
-        var MODULE_ADDRESS_WIFI_PORT                                    = default_wifi_port     // "80"
+        var MODULE_ADDRESS_WIFI_PORT                                   = default_wifi_port     // "80"
+        var MODULE_ELAPSED_TIME                                        = default_elapsedTime
+
+        var old_Time : Long                                                   = 0
+        var new_Time  : Long                                                  = 0
+
 
         var fNumberIndex                                            = listOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14")
         var nListIndex : Int                                        = -1
@@ -65,21 +72,23 @@ class Constants {
 //        const val PHYSICAL_S15 = "Left Foot"
 //        const val PHYSICAL_S16 = "Right Foot"
 
+
+        val BODY_SELECTION = listOf("Neck", "Abdomen", "Left Thigh", "Right Thigh", "Left\nBrachial", "Left\nAntebrachial", "Left Hand", "Right\nBrachial", "Right\nAntebrachial", "Right Hand", "Left Shank", "Left Foot", "Right Shank", "Right Foot")
         // new 14 point
-        const val PHYSICAL_S01 = "Neck"
-        const val PHYSICAL_S02 = "Abdomen"
-        const val PHYSICAL_S03 = "Left Thigh"
-        const val PHYSICAL_S04 = "Right Thigh"
-        const val PHYSICAL_S05 = "Left\nBrachial"
-        const val PHYSICAL_S06 = "Left\nAntebrachial"
-        const val PHYSICAL_S07 = "Left Hand"
-        const val PHYSICAL_S08 = "Right\nBrachial"
-        const val PHYSICAL_S09 = "Right\nAntebrachial"
-        const val PHYSICAL_S10 = "Right Hand"
-        const val PHYSICAL_S11 = "Left Shank"
-        const val PHYSICAL_S12 = "Left Foot"
-        const val PHYSICAL_S13 = "Right Shank"
-        const val PHYSICAL_S14 = "Right Foot"
+//        const val PHYSICAL_S01 = "Neck"
+//        const val PHYSICAL_S02 = "Abdomen"
+//        const val PHYSICAL_S03 = "Left Thigh"
+//        const val PHYSICAL_S04 = "Right Thigh"
+//        const val PHYSICAL_S05 = "Left\nBrachial"
+//        const val PHYSICAL_S06 = "Left\nAntebrachial"
+//        const val PHYSICAL_S07 = "Left Hand"
+//        const val PHYSICAL_S08 = "Right\nBrachial"
+//        const val PHYSICAL_S09 = "Right\nAntebrachial"
+//        const val PHYSICAL_S10 = "Right Hand"
+//        const val PHYSICAL_S11 = "Left Shank"
+//        const val PHYSICAL_S12 = "Left Foot"
+//        const val PHYSICAL_S13 = "Right Shank"
+//        const val PHYSICAL_S14 = "Right Foot"
 
 //        const val S01_LEFT_DP = 174.0f
 //        const val S01_TOP_DP = 0.0f
@@ -354,6 +363,7 @@ class Constants {
         var strSaveFileName : String = ""
         var fSelIndex = ArrayList<Double>()
         var arClickArea = ArrayList<ClickableArea>()
+        var nSelectionIndex = 1
 
         var recentCreateddate = ""
         var recentEmergency : Int = 1

@@ -1,7 +1,6 @@
 package com.smu.leisure
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.smu.leisure.base.ClickableArea
 import com.smu.leisure.base.CommonUtils
 import com.smu.leisure.base.Constants
+import com.smu.leisure.base.CustomDialog
 import com.smu.leisure.base.NetworkCallback
 import com.smu.leisure.base.SensorData
 import com.smu.leisure.databinding.ActivityMainBinding
@@ -35,6 +34,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
     lateinit var db : AppDatabase
     lateinit var leisureDao: LeisureDao
     private val drawnViews = mutableSetOf<Int>()
+    private lateinit var customDialog : CustomDialog
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
         binding.btData.setOnClickListener(this)
         binding.btSetting.setOnClickListener(this)
 
+
         // Temp Test Data
         Constants.fSelIndex.add(1.1)
         Constants.fSelIndex.add(2.2)
@@ -101,10 +102,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
         Constants.fSelIndex.add(8.8)
         Constants.fSelIndex.add(9.9)
         Constants.fSelIndex.add(10.0)
-        Constants.fSelIndex.add(11.1)
+        Constants.fSelIndex.add(-11.1)
         Constants.fSelIndex.add(12.2)
         Constants.fSelIndex.add(13.3)
         Constants.fSelIndex.add(14.4)
+
+        customDialog = CustomDialog(this, 1)
+        Constants.old_Time = System.currentTimeMillis()
     }
 
     private fun settingAreas() {
@@ -274,8 +278,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
             R.id.btConnect -> {
 //                Toast.makeText(this, "Clicked Connect", Toast.LENGTH_SHORT).show()
                 Log.e("eleutheria", "MODULE_ADDRESS_WIFI_IP : ${Constants.MODULE_ADDRESS_WIFI_IP}, MODULE_ADDRESS_WIFI_PORT : ${Constants.MODULE_ADDRESS_WIFI_PORT}")
+                val localIP = "joint.local"
                 Thread {
                     networkClient.connect(Constants.MODULE_ADDRESS_WIFI_IP, Constants.MODULE_ADDRESS_WIFI_PORT.toInt(), applicationContext)
+//                    networkClient.connect(localIP, Constants.MODULE_ADDRESS_WIFI_PORT.toInt(), applicationContext)
                 }.start()
 //                insertTestData()
             }
@@ -288,7 +294,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 
                 }.start()
 //                val response = "S01:1.11,1.22,1.33;C02:2.11,2.22,2.33;S03:3.11,3.22,3.33;S04:4.11,4.22,4.33;S05:5.11,5.22,5.33;S06:6.11,6.22,6.33;S07:7.11,7.22,7.33;S08:8.11,8.22,8.33;S09:9.11,9.22,9.33;S10:10.11,10.22,10.33;S11:11.11,11.22,11.33;S12:12.11,12.22,12.33;S13:13.11,13.22,13.33;S14:14.11,14.22,14.33!"
-//                val response = "S01:010,145,302;S02:067,183,209;S03:035,129,245;S04:072,091,312;S05:023,132,280;S06:054,101,360;S07:008,075,190;S08:098,126,210;S09:048,117,230;S10:012,091,273;S11:034,154,193;S12:078,115,237;C13:021,092,199;S14:047,134,278!"
+//                val response = "S01:010,145,302;S02:067,183,209;S03:035,129,245;D04:072,091,312;S05:023,132,280;S06:054,101,360;S07:008,075,190;S08:098,126,210;S09:048,117,230;S10:012,091,273;S11:034,154,193;D12:078,115,237;S13:021,092,199;S14:047,134,278!"
 //                onMessageReceived(response)
 //                insertTestData()
 
@@ -314,7 +320,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
             R.id.btData -> {
                 val intent = Intent(this@MainActivity, DataActivity::class.java)
                 startActivity(intent)
-
             }
             R.id.btSetting -> {
                 val intent = Intent(this@MainActivity, SettingActivity::class.java)
@@ -380,168 +385,175 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 //    }
 
     private fun showCustomDialog(index : Int) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_custom_degree, null)
-        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialogDegree)
 
-        var strDegree = "0.0"
-        var strPhysical = "Head"
-        var bIsMinus = false
+        customDialog.setCancelable(true)
+        customDialog.updateValue(index)
+        customDialog.show()
 
-        when(index) {
-            Constants.POINT_AREA_S01 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S01 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S01
+//        val dialogView = layoutInflater.inflate(R.layout.dialog_custom_degree, null)
+//        val dialogRoot = dialogView.findViewById<ConstraintLayout>(R.id.clDialogDegree)
+//
+//        var strDegree = "0.0"
+//        var strPhysical = "Head"
+//        var bIsMinus = false
+//
+//        when(index) {
+//            Constants.POINT_AREA_S01 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S01 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S01
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S02 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S02 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S02
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S03 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S03 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S03
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S04 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S04 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S04
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S05 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S05 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S05
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S06 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S06 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S06
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S07 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S07 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S07
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S08 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S08 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S08
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S09 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S09 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S09
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S10 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S10 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S10
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S11 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S11 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S11
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S12 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S12 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S12
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S13 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S13 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S13
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
+//            Constants.POINT_AREA_S14 -> {
+//                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S14 - 1]
+//                strDegree = dataItem.toString()
+//                strPhysical = Constants.PHYSICAL_S14
+//
+//                if(dataItem < 0) {
+//                    bIsMinus = true
+//                }
+//                // Change the background image
+//                dialogRoot.setBackgroundResource(R.drawable.popup)
+//            }
 
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S02 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S02 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S02
 
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S03 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S03 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S03
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S04 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S04 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S04
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S05 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S05 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S05
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S06 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S06 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S06
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S07 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S07 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S07
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S08 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S08 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S08
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S09 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S09 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S09
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S10 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S10 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S10
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S11 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S11 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S11
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S12 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S12 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S12
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S13 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S13 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S13
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
-            Constants.POINT_AREA_S14 -> {
-                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S14 - 1]
-                strDegree = dataItem.toString()
-                strPhysical = Constants.PHYSICAL_S14
-
-                if(dataItem < 0) {
-                    bIsMinus = true
-                }
-                // Change the background image
-                dialogRoot.setBackgroundResource(R.drawable.popup)
-            }
 //            Constants.POINT_AREA_S15 -> {
 //                val dataItem = Constants.fSelIndex[Constants.POINT_AREA_S15 - 1]
 //                strDegree = dataItem.toString()
@@ -556,28 +568,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 //                // Change the background image
 //                dialogRoot.setBackgroundResource(R.drawable.popup)
 //            }
-        }
+//        }
 
 
         // Create the dialog
-        val dialog = Dialog(this)
-        dialog.setContentView(dialogView)
-        dialog.setCancelable(true) // Set to false if you don't want it to be dismissible
-
-        // Access TextViews if you need to set text dynamically
-        val tvNumber = dialogView.findViewById<TextView>(R.id.tvNumber)
-        val tvDegree = dialogView.findViewById<TextView>(R.id.tvDegree)
-
-        if(bIsMinus) {
-            tvDegree.setTextColor(getColor(R.color.red))
-        }
-
-        tvNumber.text = strPhysical
-        val strDegreeD = strDegree + getString(R.string.app_common_degree)
-        tvDegree.text = strDegreeD
-
-        // Show the dialog
-        dialog.show()
+//        val dialog = Dialog(this)
+//        dialog.setContentView(dialogView)
+//        dialog.setCancelable(true) // Set to false if you don't want it to be dismissible
+//
+//        // Access TextViews if you need to set text dynamically
+//        val tvNumber = dialogView.findViewById<TextView>(R.id.tvNumber)
+//        val tvDegree = dialogView.findViewById<TextView>(R.id.tvDegree)
+//
+//        if(bIsMinus) {
+//            tvDegree.setTextColor(getColor(R.color.red))
+//        } else {
+//            tvDegree.setTextColor(getColor(R.color.black))
+//        }
+//
+//        tvNumber.text = strPhysical
+//        val strDegreeD = strDegree + getString(R.string.app_common_degree)
+//        tvDegree.text = strDegreeD
+//
+//        // Show the dialog
+//        dialog.show()
     }
 
 //    private fun connectClient() {
@@ -614,58 +628,72 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 
     private fun s01Click() {
         showCustomDialog(Constants.POINT_AREA_S01)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S01
     }
 
     private fun s02Click() {
         showCustomDialog(Constants.POINT_AREA_S02)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S02
     }
 
     private fun s03Click() {
         showCustomDialog(Constants.POINT_AREA_S03)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S03
     }
 
     private fun s04Click() {
         showCustomDialog(Constants.POINT_AREA_S04)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S04
     }
 
     private fun s05Click() {
         showCustomDialog(Constants.POINT_AREA_S05)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S05
     }
 
     private fun s06Click() {
         showCustomDialog(Constants.POINT_AREA_S06)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S06
     }
 
     private fun s07Click() {
         showCustomDialog(Constants.POINT_AREA_S07)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S07
     }
 
     private fun s08Click() {
         showCustomDialog(Constants.POINT_AREA_S08)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S08
     }
 
     private fun s09Click() {
         showCustomDialog(Constants.POINT_AREA_S09)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S09
     }
 
     private fun s10Click() {
         showCustomDialog(Constants.POINT_AREA_S10)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S10
     }
 
     private fun s11Click() {
         showCustomDialog(Constants.POINT_AREA_S11)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S11
     }
 
     private fun s12Click() {
         showCustomDialog(Constants.POINT_AREA_S12)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S12
     }
 
     private fun s13Click() {
         showCustomDialog(Constants.POINT_AREA_S13)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S13
     }
 
     private fun s14Click() {
         showCustomDialog(Constants.POINT_AREA_S14)
+        Constants.nSelectionIndex = Constants.POINT_AREA_S14
     }
 //
 //    private fun s15Click() {
@@ -778,7 +806,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
             setImageResource(imageResId)
             // Set layout parameters with specified size
             layoutParams = ConstraintLayout.LayoutParams(
-                200, 200,
+                250, 250,
 //                ViewGroup.LayoutParams.WRAP_CONTENT,
 //                ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
@@ -876,7 +904,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 
         val returnData = SensorData(strEmergency, Random.nextDouble() * (10.0 - 0.1) + 0.1, Random.nextDouble() * (10.0 - 0.1) + 0.1, Random.nextDouble() * (10.0 - 0.1) + 0.1)
 
-        Log.e("eleutheria", "strEmergency : $strEmergency")
+//        Log.e("eleutheria", "strEmergency : $strEmergency")
         return  returnData
     }
 
@@ -903,6 +931,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
 
             return
         }
+        var arPart = ArrayList<String>()
         val strData = message.substringBefore("!")
 
         val sensorsData = strData.split(';')
@@ -950,6 +979,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
                     else -> strEmergency
                 }
 
+                if(prefix == "D") {
+                    arPart.add(number)
+                }
+
                 when (number) {
                     "01" -> s01 =
                         SensorData(prefix, sensorValues[0] - 180, sensorValues[1] - 180, sensorValues[2] - 180)
@@ -995,32 +1028,44 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
                 }
                 if(prefix != "S") {
                     Log.e("eleutheria", "strEmergency: $strEmergency")
-                    drawEffect(
-                        binding.main,
-                        number
-                    )
+                    runOnUiThread {
+                        drawEffect(
+                            binding.main,
+                            number
+                        )
+                    }
                 }
             }
         }
         val createddate = commonUtils.getCurrentDateTime()
 
-        if(strEmergency == "S") {
-            Constants.fSelIndex.clear()
-            Constants.fSelIndex.add(s01.dYaw)
-            Constants.fSelIndex.add(s02.dYaw)
-            Constants.fSelIndex.add(s03.dYaw)
-            Constants.fSelIndex.add(s04.dYaw)
-            Constants.fSelIndex.add(s05.dYaw)
-            Constants.fSelIndex.add(s06.dYaw)
-            Constants.fSelIndex.add(s07.dYaw)
-            Constants.fSelIndex.add(s08.dYaw)
-            Constants.fSelIndex.add(s09.dYaw)
-            Constants.fSelIndex.add(s10.dYaw)
-            Constants.fSelIndex.add(s11.dYaw)
-            Constants.fSelIndex.add(s12.dYaw)
-            Constants.fSelIndex.add(s13.dYaw)
-            Constants.fSelIndex.add(s14.dYaw)
-        } else {
+        Constants.fSelIndex.clear()
+        Constants.fSelIndex.add(s01.dYaw)
+        Constants.fSelIndex.add(s02.dYaw)
+        Constants.fSelIndex.add(s03.dYaw)
+        Constants.fSelIndex.add(s04.dYaw)
+        Constants.fSelIndex.add(s05.dYaw)
+        Constants.fSelIndex.add(s06.dYaw)
+        Constants.fSelIndex.add(s07.dYaw)
+        Constants.fSelIndex.add(s08.dYaw)
+        Constants.fSelIndex.add(s09.dYaw)
+        Constants.fSelIndex.add(s10.dYaw)
+        Constants.fSelIndex.add(s11.dYaw)
+        Constants.fSelIndex.add(s12.dYaw)
+        Constants.fSelIndex.add(s13.dYaw)
+        Constants.fSelIndex.add(s14.dYaw)
+
+        Constants.new_Time = System.currentTimeMillis()
+
+        if(Constants.new_Time - Constants.old_Time > Constants.MODULE_ELAPSED_TIME) {
+            customDialog.updateValue(Constants.nSelectionIndex)
+            Constants.old_Time = Constants.new_Time
+        }
+
+        Log.e("eleutheria", "strEmergency: $strEmergency")
+
+        if(strEmergency != "S") {
+            Log.e("eleutheria", "not strEmergency: $strEmergency")
             Thread {
                 leisureDao.insertTodo(
                     LeisureEntity(
@@ -1046,19 +1091,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
             }.start()
         }
 
-
         if(!Constants.bEmergency) {
             when (strEmergency) {
                 "D", "C" -> {
                     Constants.bEmergency = true
 
                     commonUtils.sendCall()
-                    commonUtils.sendSMS()
-//                    Toast.makeText(this, "Send Call, SMS", Toast.LENGTH_SHORT).show()
+                    if(arPart.isEmpty()) {
+                        commonUtils.sendSMS()
+                    } else {
+                        commonUtils.sendSMS(arPart)
+                    }
+//                    runOnUiThread {
+//                        Toast.makeText(this, "Send Call, SMS", Toast.LENGTH_SHORT).show()
+//                    }
 
-                    Handler(Looper.getMainLooper()).postDelayed({
+//                    Handler(Looper.getMainLooper()).postDelayed({
 //                        Constants.bEmergency = false
-                    }, Constants.MILLISECOND_DRAW_EFFECT)
+//                    }, Constants.MILLISECOND_DRAW_EFFECT)
                 }
 //                else -> Log.e("eleutheria", "Unknown sensor type: $strEmergency")
             }

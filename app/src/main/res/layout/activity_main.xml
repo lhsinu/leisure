@@ -36,8 +36,8 @@
             android:layout_height="40dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/selector_button_start"
-            android:src="@drawable/icon_start_normal"  />
+            android:background="@drawable/selector_button_connect"
+            android:src="@drawable/icon_connect_normal"  />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btStart"

@@ -33,6 +33,7 @@ class SettingActivity : AppCompatActivity() {
 
         val strWifiData : String? = settings!!.getString(Constants.PREF_WIFI_DEVICE, Constants.MODULE_ADDRESS_WIFI_IP)
         val strWifiPortData : String? = settings!!.getString(Constants.PREF_WIFIPORT_DEVICE, Constants.MODULE_ADDRESS_WIFI_PORT)
+        val strTimeData : String? = settings!!.getString(Constants.PREF_ELAPSED_TIME, Constants.MODULE_ELAPSED_TIME.toString())
 
         binding.btContact.setOnClickListener {
             val contactIntent = Intent(Intent.ACTION_PICK)
@@ -42,11 +43,13 @@ class SettingActivity : AppCompatActivity() {
 
         binding.btSetting119.setOnClickListener {
             binding.tv119.text = getString(R.string.strNumber119)
+            Constants.strEmergencyNumber = getString(R.string.strNumber119)
         }
-
 
         binding.btIPOK.setOnClickListener {
             val strWifiAddress = binding.etIP1.text.toString() + "." + binding.etIP2.text.toString() + "." + binding.etIP3.text.toString() + "." + binding.etIP4.text.toString()
+
+            Constants.MODULE_ADDRESS_WIFI_IP = strWifiAddress
 
             Log.e("eleutheria", "strWifiAddress : $strWifiAddress")
             val editor = settings!!.edit()
@@ -55,12 +58,27 @@ class SettingActivity : AppCompatActivity() {
 
             val strPortAddress = binding.etPort.text.toString()
 
+            Constants.MODULE_ADDRESS_WIFI_PORT = strPortAddress
+
             Log.e("eleutheria", "strPortAddress : $strPortAddress")
             val ipEditor = settings!!.edit()
             ipEditor.putString(Constants.PREF_WIFIPORT_DEVICE , strPortAddress)
             ipEditor.apply()
 
             Toast.makeText(this, "PortAddress : $strPortAddress", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btElapsedTime.setOnClickListener {
+            val strElapsedTime = binding.etElapsedTime.text.toString()
+
+            Constants.MODULE_ELAPSED_TIME = strElapsedTime.toLong()
+
+            Log.e("eleutheria", "strElapsedTime : $strElapsedTime")
+            val editor = settings!!.edit()
+            editor.putString(Constants.PREF_ELAPSED_TIME, strElapsedTime)
+            editor.apply()
+
+            Toast.makeText(this, "ElapsedTime : $strElapsedTime", Toast.LENGTH_SHORT).show()
         }
 
         binding.btReset.setOnClickListener {
@@ -79,6 +97,13 @@ class SettingActivity : AppCompatActivity() {
             editorPort.putString(Constants.PREF_WIFIPORT_DEVICE, strWifiPortAddress)
             editorPort.apply()
 
+            val strElapsedTime = Constants.default_elapsedTime.toString()
+
+            Log.e("eleutheria", "strElapsedTime : $strElapsedTime")
+            val editorTime = settings!!.edit()
+            editorTime.putString(Constants.PREF_ELAPSED_TIME, strElapsedTime)
+            editorTime.apply()
+
             if (strWifiAddress != null)
             {
                 val arWifiData = strWifiAddress.split(".")
@@ -94,6 +119,11 @@ class SettingActivity : AppCompatActivity() {
             if (strWifiPortAddress != null)
             {
                 binding.etPort.setText(strWifiPortAddress)
+            }
+
+            if (strElapsedTime != null)
+            {
+                binding.etElapsedTime.setText(strElapsedTime)
             }
         }
 
@@ -112,6 +142,11 @@ class SettingActivity : AppCompatActivity() {
         if (strWifiPortData != null)
         {
             binding.etPort.setText(strWifiPortData)
+        }
+
+        if (strTimeData != null)
+        {
+            binding.etElapsedTime.setText(strTimeData)
         }
     }
 

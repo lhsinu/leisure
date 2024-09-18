@@ -29,7 +29,8 @@ class CommonUtils {
     }
 
     fun getCurrentDateTime(): String {
-        val dateFormat = SimpleDateFormat("yy/MM/dd HH:mm:ss", Locale.getDefault())
+//        val dateFormat = SimpleDateFormat("yy/MM/dd HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyMMddHH:mm:ss", Locale.getDefault())
         return dateFormat.format(Date())
     }
 
@@ -96,6 +97,7 @@ class CommonUtils {
     fun sendSMS() {
         val str119Number = Constants.strEmergencyNumber
 
+        var strLog = str119Number + "\n"
         val smsManager = SmsManager.getDefault()
 
         val locationProvider = LocationProvider(MyApplication.ApplicationContext())
@@ -103,6 +105,7 @@ class CommonUtils {
         val latitude = locationProvider.getLocationLatitude()
         val longitude = locationProvider.getLocationLongitude()
 
+        strLog += "latitude : $latitude, longitude : $longitude \n"
         Locale.setDefault(Locale("en", "GB"))
         val newLocale = Locale.getDefault()
         val geocoder = Geocoder(MyApplication.ApplicationContext(), newLocale)
@@ -110,17 +113,68 @@ class CommonUtils {
         val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)!!
         var strAddress = MyApplication.ApplicationContext().getString(R.string.strAccidentAddress)
 
+        strLog += "strAddress : $strAddress \n"
+
         if(addresses.isNotEmpty()) {
             strAddress = addresses[0].getAddressLine(0)
         }
 
+        strLog += "real strAddress : $strAddress \n"
         val message = "Emergency!! I need rescue!! track my location!! Location : $strAddress"
         val strFirstString = str119Number.substring(0, 1)
 
+        strLog += "message : $message, strFirstString : $strFirstString \n"
         if(strFirstString == "0") {
             Log.e("eleutheria", "str119Number : $str119Number, message : $message")
             smsManager.sendTextMessage(str119Number, null, message, null, null)
+            strLog += "strFirstString is starting 0 \n"
         }
+        writeTextToFile(strLog, getFileName("Log_"))
+    }
+
+    fun sendSMS(arInjury : ArrayList<String>) {
+        val str119Number = Constants.strEmergencyNumber
+
+        var strParts = ""
+        if(arInjury.size > 1){
+            strParts = "${arInjury[0]}, etc"
+        } else {
+            strParts = "${arInjury[0]}"
+        }
+
+        var strLog = str119Number + "\n"
+        val smsManager = SmsManager.getDefault()
+
+        val locationProvider = LocationProvider(MyApplication.ApplicationContext())
+
+        val latitude = locationProvider.getLocationLatitude()
+        val longitude = locationProvider.getLocationLongitude()
+
+        strLog += "latitude : $latitude, longitude : $longitude \n"
+        Locale.setDefault(Locale("en", "GB"))
+        val newLocale = Locale.getDefault()
+        val geocoder = Geocoder(MyApplication.ApplicationContext(), newLocale)
+
+        val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)!!
+        var strAddress = MyApplication.ApplicationContext().getString(R.string.strAccidentAddress)
+
+        strLog += "strAddress : $strAddress \n"
+
+        if(addresses.isNotEmpty()) {
+            strAddress = addresses[0].getAddressLine(0)
+        }
+
+        strLog += "real strAddress : $strAddress \n"
+        val message = "Injury! I need medical help in $strParts, my location: $strAddress"
+        val strFirstString = str119Number.substring(0, 1)
+
+        strLog += "message : $message, strFirstString : $strFirstString \n"
+        if(strFirstString == "0") {
+            Log.e("eleutheria", "str119Number : $str119Number, message : $message")
+            smsManager.sendTextMessage(str119Number, null, message, null, null)
+            strLog += "strFirstString is starting 0 \n"
+        }
+        writeTextToFile(strLog, getFileName("Log_"))
     }
 
     fun sendCall() {

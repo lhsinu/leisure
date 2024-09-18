@@ -13,6 +13,7 @@
     <string name="strIP">IP : Port</string>
     <string name="strDot">.</string>
     <string name="strColon">:</string>
+    <string name="strElapsedTime">ElapsedTime :</string>
     <string name="strReset">RESET</string>
 
     <string name="strDataDateDefault">2023.11.14</string>
@@ -20,8 +21,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="str_wound">부상상황</string>
-    <string name="str_emergency">위급상황</string>
+    <string name="str_danger">부상상황</string>
+    <string name="str_critical">사고상황</string>
     <string name="strAccidentAddress">GPS Data Is Not Exist</string>
 
 

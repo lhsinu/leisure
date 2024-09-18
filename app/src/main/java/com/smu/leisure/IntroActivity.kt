@@ -70,6 +70,9 @@ class IntroActivity : AppCompatActivity() {
         Constants.MODULE_ADDRESS_WIFI_PORT =
             settings!!.getString(Constants.PREF_WIFIPORT_DEVICE, Constants.default_wifi_port).toString()
 
+        Constants.MODULE_ELAPSED_TIME =
+            (settings!!.getString(Constants.PREF_ELAPSED_TIME, (Constants.default_elapsedTime).toString()))!!.toLong()
+
         checkAllPermissions()
     }
 
