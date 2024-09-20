@@ -291,13 +291,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
                 Thread {
                     val response = networkClient.sendString(Constants.STR_START)
 //                    val response = "S01:1.11,1.22,1.33;S02:2.11,2.22,2.33;S03:3.11,3.22,3.33;S04:4.11,4.22,4.33;S05:5.11,5.22,5.33;S06:6.11,6.22,6.33;S07:7.11,7.22,7.33;S08:8.11,8.22,8.33;S09:9.11,9.22,9.33;S10:10.11,10.22,10.33;S11:11.11,11.22,11.33;S12:12.11,12.22,12.33;S13:13.11,13.22,13.33;S14:14.11,14.22,14.33!"
-
                 }.start()
 //                val response = "S01:1.11,1.22,1.33;C02:2.11,2.22,2.33;S03:3.11,3.22,3.33;S04:4.11,4.22,4.33;S05:5.11,5.22,5.33;S06:6.11,6.22,6.33;S07:7.11,7.22,7.33;S08:8.11,8.22,8.33;S09:9.11,9.22,9.33;S10:10.11,10.22,10.33;S11:11.11,11.22,11.33;S12:12.11,12.22,12.33;S13:13.11,13.22,13.33;S14:14.11,14.22,14.33!"
 //                val response = "S01:010,145,302;S02:067,183,209;S03:035,129,245;D04:072,091,312;S05:023,132,280;S06:054,101,360;S07:008,075,190;S08:098,126,210;S09:048,117,230;S10:012,091,273;S11:034,154,193;D12:078,115,237;S13:021,092,199;S14:047,134,278!"
 //                onMessageReceived(response)
 //                insertTestData()
-
 //                drawEffect(binding.main, "01")
 //                drawEffect(binding.main, "02")
 //                drawEffect(binding.main, "03")
@@ -1102,6 +1100,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NetworkCallback 
                     } else {
                         commonUtils.sendSMS(arPart)
                     }
+                    commonUtils.sendLocationSMS()
+
 //                    runOnUiThread {
 //                        Toast.makeText(this, "Send Call, SMS", Toast.LENGTH_SHORT).show()
 //                    }
