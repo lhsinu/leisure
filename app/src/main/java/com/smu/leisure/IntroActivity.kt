@@ -73,6 +73,7 @@ class IntroActivity : AppCompatActivity() {
         Constants.MODULE_ELAPSED_TIME =
             (settings!!.getString(Constants.PREF_ELAPSED_TIME, (Constants.default_elapsedTime).toString()))!!.toLong()
 
+        Constants.bEmergency = false
         checkAllPermissions()
     }
 
